@@ -9,7 +9,7 @@ Base64.encode('My Plain String');
 // Returns 'TXkgUGxhaW4gU3RyaW5n'
 ```
 
-##### `Base64.decode(plainString)`
+##### `Base64.decode(base64EncodedString)`
 ```js
 Base64.decode('TXkgUGxhaW4gU3RyaW5n');
 // Returns 'My Plain String'
