@@ -2,6 +2,11 @@ Isomorphic Base64 implementation
 =====
 Isomorphic string encoding and decoding Base64 implementation
 
+# Installation
+```shell
+meteor add ostrio:base64
+```
+
 # API
 ##### `Base64.encode(plainString)`
 ```js
