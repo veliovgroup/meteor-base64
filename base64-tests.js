@@ -29,7 +29,7 @@ Tinytest.add('Base64.encode() - speed (see console) - using Native Code', functi
   console.info(`Encode using Native Code: ${getTime()- s}ms`);
 });
 
-Tinytest.addAsync('Base64.encode() - async - speed (see console)', function (test, next) {
+Tinytest.addAsync('Base64.encode() - speed (see console) - async (WebWorker) - default', function (test, next) {
   let a = 0;
   let f = 0;
   let s = 0;
@@ -62,7 +62,7 @@ Tinytest.add('Base64.decode() - speed (see console) - default', function (test) 
   console.info(`Decode: ${getTime()- s}ms`);
 });
 
-Tinytest.addAsync('Base64.decode() - async - speed (see console)', function (test, next) {
+Tinytest.addAsync('Base64.decode() - speed (see console) - async (WebWorker) - default', function (test, next) {
   let a = 0;
   let f = 0;
   let s = 0;
@@ -104,7 +104,7 @@ Tinytest.add('Base64.encode() - unicode', function (test) {
   test.equal(Base64.encode('小飼弾'), '5bCP6aO85by+');
 });
 
-Tinytest.add('Base64.encode() - unicode - speed (see console) - default', function (test) {
+Tinytest.add('Base64.encode() - speed (see console) - unicode - default', function (test) {
   const s = getTime();
   let a = 0;
   while (a < 10000) {
@@ -114,7 +114,7 @@ Tinytest.add('Base64.encode() - unicode - speed (see console) - default', functi
   console.info(`Encode unicode: ${getTime()- s}ms`);
 });
 
-Tinytest.add('Base64.encode() - unicode - speed (see console) - using Native Code', function (test) {
+Tinytest.add('Base64.encode() - speed (see console) - unicode - using Native Code', function (test) {
   const s = getTime();
   let a = 0;
   while (a < 10000) {
@@ -124,7 +124,7 @@ Tinytest.add('Base64.encode() - unicode - speed (see console) - using Native Cod
   console.info(`Encode unicode using Native Code: ${getTime()- s}ms`);
 });
 
-Tinytest.addAsync('Base64.encode() - async - unicode - speed (see console)', function (test, next) {
+Tinytest.addAsync('Base64.encode() - speed (see console) - async (WebWorker) - unicode - default', function (test, next) {
   let a = 0;
   let f = 0;
   let s = 0;
@@ -147,7 +147,7 @@ Tinytest.add('Base64.decode() - unicode', function (test) {
   test.equal(Base64.decode('5bCP6aO85by+'), '小飼弾');
 });
 
-Tinytest.add('Base64.decode() - unicode - speed (see console) - default', function (test) {
+Tinytest.add('Base64.decode() - speed (see console) - unicode - default', function (test) {
   const s = getTime();
   let a = 0;
   while (a < 10000) {
@@ -157,7 +157,7 @@ Tinytest.add('Base64.decode() - unicode - speed (see console) - default', functi
   console.info(`Decode unicode: ${getTime()- s}ms`);
 });
 
-Tinytest.add('Base64.decode() - unicode - speed (see console) - using Native Code', function (test) {
+Tinytest.add('Base64.decode() - speed (see console) - unicode - using Native Code', function (test) {
   const s = getTime();
   let a = 0;
   while (a < 10000) {
@@ -176,21 +176,21 @@ Tinytest.add('Base64.decode() - unicode - multi-line', function (test) {
 });
 
 
-Tinytest.addAsync('Base64.encode() - async - unicode - essential', function (test, next) {
+Tinytest.addAsync('Base64.encode() - async (WebWorker) - unicode - essential', function (test, next) {
   Base64.encode('小飼弾', (error, b64) => {
     test.equal(b64, '5bCP6aO85by+');
     next();
   });
 });
 
-Tinytest.addAsync('Base64.decode() - async - unicode - essential', function (test, next) {
+Tinytest.addAsync('Base64.decode() - async (WebWorker) - unicode - essential', function (test, next) {
   Base64.decode('5bCP6aO85by+', (error, str) => {
     test.equal(str, '小飼弾');
     next();
   });
 });
 
-Tinytest.addAsync('Base64.decode() - async - unicode - speed (see console)', function (test, next) {
+Tinytest.addAsync('Base64.decode() - speed (see console) - async (WebWorker) - unicode - default', function (test, next) {
   let a = 0;
   let f = 0;
   let s = 0;

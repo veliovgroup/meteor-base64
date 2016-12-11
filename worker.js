@@ -91,10 +91,11 @@
   };
 
   root.onmessage = function(e) {
-    if (e.data.op === 'encode') {
-      postMessage({id: e.data.id, op: e.data.op, result: encode(e.data.str)});
+    var _data = e.data.split('|-|');
+    if (_data[0] === 'encode') {
+      postMessage(_data[1] + '|-|' + encode(_data[2]));
     } else {
-      postMessage({id: e.data.id, op: e.data.op, result: decode(e.data.str)});
+      postMessage(_data[1] + '|-|' + decode(_data[2]));
     }
   };
 }(this));

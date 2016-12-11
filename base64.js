@@ -1,10 +1,12 @@
 /* jshint node:true */
 /* jshint esversion:6 */
 
+const root = this;
+
 export class base64 {
   constructor(allowWebWorker, useNative) {
     this._keyStr           = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-    this.isNode            = (this.navigator || this.window) ? false : true;
+    this.isNode            = (root.navigator || root.window) ? false : true;
     this.ascii             = /^[ -~\t\n\r]+$/;
     this._allowWebWorker   = (allowWebWorker === undefined) ? true : allowWebWorker;
     this._supportWebWorker = false;
@@ -12,13 +14,13 @@ export class base64 {
     if (this._allowWebWorker) {
       if (!this.isNode) {
         var _URL;
-        if (this.window.Worker && this.window.Blob) {
+        if (root.window.Worker && root.window.Blob) {
           this._supportWebWorker = true;
-          _URL = this.window.URL || this.window.webkitURL || this.window.mozURL;
-          this._webWorkerUrl = _URL.createObjectURL(new this.window.Blob(['!function(a){"use strict";var b=/^[ -~\\t\\n\\r]+$/,c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",d=function(a){var d,e,h,i,j,k,l,b="",m=0;for(f(a)&&(a=g(a));m<a.length;)d=a.charCodeAt(m++),e=a.charCodeAt(m++),h=a.charCodeAt(m++),i=d>>2,j=(3&d)<<4|e>>4,k=(15&e)<<2|h>>6,l=63&h,isNaN(e)?k=l=64:isNaN(h)&&(l=64),b+=c.charAt(i)+c.charAt(j)+c.charAt(k)+c.charAt(l);return b},e=function(a){for(var d,e,f,g,i,j,k,b="",l=0;l<a.length;)g=c.indexOf(a.charAt(l++)),i=c.indexOf(a.charAt(l++)),j=c.indexOf(a.charAt(l++)),k=c.indexOf(a.charAt(l++)),d=g<<2|i>>4,e=(15&i)<<4|j>>2,f=(3&j)<<6|k,b+=String.fromCharCode(d),64!=j&&(b+=String.fromCharCode(e)),64!=k&&(b+=String.fromCharCode(f));return h(b)},f=function(a){return!b.test(a)},g=function(a){a=a.replace(/\\r\\n/g,"\\n");for(var b="",c=0;c<a.length;c++){var d=a.charCodeAt(c);d<128?b+=String.fromCharCode(d):d>127&&d<2048?(b+=String.fromCharCode(d>>6|192),b+=String.fromCharCode(63&d|128)):(b+=String.fromCharCode(d>>12|224),b+=String.fromCharCode(d>>6&63|128),b+=String.fromCharCode(63&d|128))}return b},h=function(a){for(var b="",c=0,d=0,e=0,f=0;c<a.length;)d=a.charCodeAt(c),d<128?(b+=String.fromCharCode(d),c++):d>191&&d<224?(e=a.charCodeAt(c+1),b+=String.fromCharCode((31&d)<<6|63&e),c+=2):(e=a.charCodeAt(c+1),f=a.charCodeAt(c+2),b+=String.fromCharCode((15&d)<<12|(63&e)<<6|63&f),c+=3);return b};a.onmessage=function(a){"encode"===a.data.op?postMessage({id:a.data.id,op:a.data.op,result:d(a.data.str)}):postMessage({id:a.data.id,op:a.data.op,result:e(a.data.str)})}}(this);'], {
+          _URL = root.window.URL || root.window.webkitURL || root.window.mozURL;
+          this._webWorkerUrl = _URL.createObjectURL(new root.window.Blob(['!function(a){"use strict";var b=/^[ -~\\t\\n\\r]+$/,c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",d=function(a){var d,e,h,i,j,k,l,b="",m=0;for(f(a)&&(a=g(a));m<a.length;)d=a.charCodeAt(m++),e=a.charCodeAt(m++),h=a.charCodeAt(m++),i=d>>2,j=(3&d)<<4|e>>4,k=(15&e)<<2|h>>6,l=63&h,isNaN(e)?k=l=64:isNaN(h)&&(l=64),b+=c.charAt(i)+c.charAt(j)+c.charAt(k)+c.charAt(l);return b},e=function(a){for(var d,e,f,g,i,j,k,b="",l=0;l<a.length;)g=c.indexOf(a.charAt(l++)),i=c.indexOf(a.charAt(l++)),j=c.indexOf(a.charAt(l++)),k=c.indexOf(a.charAt(l++)),d=g<<2|i>>4,e=(15&i)<<4|j>>2,f=(3&j)<<6|k,b+=String.fromCharCode(d),64!=j&&(b+=String.fromCharCode(e)),64!=k&&(b+=String.fromCharCode(f));return h(b)},f=function(a){return!b.test(a)},g=function(a){a=a.replace(/\\r\\n/g,"\\n");for(var b="",c=0;c<a.length;c++){var d=a.charCodeAt(c);d<128?b+=String.fromCharCode(d):d>127&&d<2048?(b+=String.fromCharCode(d>>6|192),b+=String.fromCharCode(63&d|128)):(b+=String.fromCharCode(d>>12|224),b+=String.fromCharCode(d>>6&63|128),b+=String.fromCharCode(63&d|128))}return b},h=function(a){for(var b="",c=0,d=0,e=0,f=0;c<a.length;)d=a.charCodeAt(c),d<128?(b+=String.fromCharCode(d),c++):d>191&&d<224?(e=a.charCodeAt(c+1),b+=String.fromCharCode((31&d)<<6|63&e),c+=2):(e=a.charCodeAt(c+1),f=a.charCodeAt(c+2),b+=String.fromCharCode((15&d)<<12|(63&e)<<6|63&f),c+=3);return b};a.onmessage=function(a){var b=a.data.split("|-|");"encode"===b[0]?postMessage(b[1]+"|-|"+d(b[2])):postMessage(b[1]+"|-|"+e(b[2]))}}(this);'], {
             type: 'application/javascript'
           }));
-        } else if (this.window.Worker) {
+        } else if (root.window.Worker) {
           this._supportWebWorker = true;
           this._webWorkerUrl = Meteor.absoluteUrl('packages/ostrio_base64/worker.min.js');
         } else {
@@ -26,25 +28,28 @@ export class base64 {
         }
 
         if (this._supportWebWorker) {
-          this._worker   = new this.window.Worker(this._webWorkerUrl);
+          const self     = this;
+          this._worker   = new root.window.Worker(this._webWorkerUrl);
           this._handlers = {};
-          this._worker.onmessage = (e) => {
-            if (this._handlers[e.data.id]) {
-              this._handlers[e.data.id](null, e.data.result);
-              delete this._handlers[e.data.id];
+          this._worker.onmessage = function (e) {
+            const _data = e.data.split('|-|');
+            if (self._handlers[_data[0]]) {
+              self._handlers[_data[0]](null, _data[1]);
+              delete self._handlers[_data[0]];
             }
           };
 
-          this._worker.onerror = (e) => {
-            this._worker.terminate();
-            this._handlers = {};
+          this._worker.onerror = function (e) {
+            console.error('[ostrio:base64] WebWorker Error', e);
+            self._worker.terminate();
+            self._handlers = {};
           };
         }
       }
     }
 
     if (useNative && !this.isNode) {
-      this.useNative = !!(this.window.atob && this.window.btoa);
+      this.useNative = !!(root.window.atob && root.window.btoa);
     } else if (useNative && this.isNode) {
       this.useNative = true;
     } else {
@@ -64,14 +69,15 @@ export class base64 {
       }
     } else if (this.useNative && !this.isNode) {
       if (this._isUnicode(e)){
-        e = Base64._utf8_encode(e);
+        e = this._utf8_encode(e);
       }
-      return this.window.btoa(e);
+      return root.window.btoa(e);
     } else {
       if (cb && this._supportWebWorker) {
         const id = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
         this._registerHandler(id, cb);
-        this._worker.postMessage({op: 'encode', str: e, id});
+        // this._worker.postMessage({op: 'encode', str: e, id});
+        this._worker.postMessage(`encode|-|${id}|-|${e}`);
       } else {
         let t = "";
         let n;
@@ -83,7 +89,7 @@ export class base64 {
         let a;
         let f = 0;
         if (this._isUnicode(e)){
-          e = Base64._utf8_encode(e);
+          e = this._utf8_encode(e);
         }
         while (f < e.length) {
           n = e.charCodeAt(f++);
@@ -118,12 +124,12 @@ export class base64 {
         return new Buffer(e, 'base64').toString('utf8');
       }
     } else if (this.useNative && !this.isNode) {
-      return Base64._utf8_decode(this.window.atob(e));
+      return this._utf8_decode(root.window.atob(e));
     } else {
       if (cb && this._supportWebWorker) {
         const id = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
         this._registerHandler(id, cb);
-        this._worker.postMessage({op: 'decode', str: e, id});
+        this._worker.postMessage(`decode|-|${id}|-|${e}`);
       } else {
         let t = "";
         let n;
@@ -150,7 +156,7 @@ export class base64 {
             t += String.fromCharCode(i);
           }
         }
-        t = Base64._utf8_decode(t);
+        t = this._utf8_decode(t);
         if (cb) {
           cb(null, t);
         } else {
