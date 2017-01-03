@@ -8,7 +8,7 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.0');
-  api.use('ecmascript');
+  api.use('ecmascript@0.1.5');
   api.addAssets('worker.min.js', 'client');
   api.mainModule('base64.js');
   api.export('Base64');
