@@ -1,11 +1,11 @@
-/* jshint node:true */
-/* jshint esversion:6 */
-
 const root = this;
+const _floor = (num) => {
+  return num | 0;
+};
 
 export class base64 {
   constructor(allowWebWorker, useNative) {
-    this._keyStr           = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+    this._keyStr           = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
     this.isNode            = (root.navigator || root.window) ? false : true;
     this.ascii             = /^[ -~\t\n\r]+$/;
     this._allowWebWorker   = (allowWebWorker === undefined) ? true : allowWebWorker;
@@ -13,11 +13,10 @@ export class base64 {
 
     if (this._allowWebWorker) {
       if (!this.isNode) {
-        var _URL;
-        if (root.window.Worker && root.window.Blob) {
+        const _URL = root.window.URL || root.window.webkitURL || root.window.mozURL || root.window.msURL || root.window.oURL || false;
+        if (root.window.Worker && root.window.Blob && _URL) {
           this._supportWebWorker = true;
-          _URL = root.window.URL || root.window.webkitURL || root.window.mozURL;
-          this._webWorkerUrl = _URL.createObjectURL(new root.window.Blob(['!function(a){"use strict";var b=/^[ -~\\t\\n\\r]+$/,c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",d=function(a){var d,e,h,i,j,k,l,b="",m=0;for(f(a)&&(a=g(a));m<a.length;)d=a.charCodeAt(m++),e=a.charCodeAt(m++),h=a.charCodeAt(m++),i=d>>2,j=(3&d)<<4|e>>4,k=(15&e)<<2|h>>6,l=63&h,isNaN(e)?k=l=64:isNaN(h)&&(l=64),b+=c.charAt(i)+c.charAt(j)+c.charAt(k)+c.charAt(l);return b},e=function(a){for(var d,e,f,g,i,j,k,b="",l=0;l<a.length;)g=c.indexOf(a.charAt(l++)),i=c.indexOf(a.charAt(l++)),j=c.indexOf(a.charAt(l++)),k=c.indexOf(a.charAt(l++)),d=g<<2|i>>4,e=(15&i)<<4|j>>2,f=(3&j)<<6|k,b+=String.fromCharCode(d),64!=j&&(b+=String.fromCharCode(e)),64!=k&&(b+=String.fromCharCode(f));return h(b)},f=function(a){return!b.test(a)},g=function(a){a=a.replace(/\\r\\n/g,"\\n");for(var b="",c=0;c<a.length;c++){var d=a.charCodeAt(c);d<128?b+=String.fromCharCode(d):d>127&&d<2048?(b+=String.fromCharCode(d>>6|192),b+=String.fromCharCode(63&d|128)):(b+=String.fromCharCode(d>>12|224),b+=String.fromCharCode(d>>6&63|128),b+=String.fromCharCode(63&d|128))}return b},h=function(a){for(var b="",c=0,d=0,e=0,f=0;c<a.length;)d=a.charCodeAt(c),d<128?(b+=String.fromCharCode(d),c++):d>191&&d<224?(e=a.charCodeAt(c+1),b+=String.fromCharCode((31&d)<<6|63&e),c+=2):(e=a.charCodeAt(c+1),f=a.charCodeAt(c+2),b+=String.fromCharCode((15&d)<<12|(63&e)<<6|63&f),c+=3);return b};a.onmessage=function(a){var b=a.data.split("|-|");"encode"===b[0]?postMessage(b[1]+"|-|"+d(b[2])):postMessage(b[1]+"|-|"+e(b[2]))}}(this);'], {
+          this._webWorkerUrl = _URL.createObjectURL(new root.window.Blob(['!function(a){"use strict";var b=/^[ -~\\t\\n\\r]+$/,c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",d=function(a){var d,e,h,i,j,k,l,b="",m=0;for(f(a)&&(a=g(a));m<a.length;)d=a.charCodeAt(m++),e=a.charCodeAt(m++),h=a.charCodeAt(m++),i=d>>2,j=(3&d)<<4|e>>4,k=(15&e)<<2|h>>6,l=63&h,isNaN(e)?k=l=64:isNaN(h)&&(l=64),b+=c.charAt(i)+c.charAt(j)+c.charAt(k)+c.charAt(l);return b},e=function(a){for(var d,e,f,g,i,j,k,b="",l=0;l<a.length;)g=c.indexOf(a.charAt(l++)),i=c.indexOf(a.charAt(l++)),j=c.indexOf(a.charAt(l++)),k=c.indexOf(a.charAt(l++)),d=g<<2|i>>4,e=(15&i)<<4|j>>2,f=(3&j)<<6|k,b+=String.fromCharCode(d),64!=j&&(b+=String.fromCharCode(e)),64!=k&&(b+=String.fromCharCode(f));return h(b)},f=function(a){return!b.test(a)},g=function(a){a=a.replace(/\\r\\n/g,"\\n");for(var b="",c=0;c<a.length;c++){var d=a.charCodeAt(c);d<128?b+=String.fromCharCode(d):d>127&&d<2048?(b+=String.fromCharCode(d>>6|192),b+=String.fromCharCode(63&d|128)):(b+=String.fromCharCode(d>>12|224),b+=String.fromCharCode(d>>6&63|128),b+=String.fromCharCode(63&d|128))}return b},h=function(a){for(var b="",c=0,d=0,e=0,f=0;c<a.length;)d=a.charCodeAt(c),d<128?(b+=String.fromCharCode(d),c++):d>191&&d<224?(e=a.charCodeAt(c+1),b+=String.fromCharCode((31&d)<<6|63&e),c+=2):(e=a.charCodeAt(c+1),f=a.charCodeAt(c+2),b+=String.fromCharCode((15&d)<<12|(63&e)<<6|63&f),c+=3);return b};a.onmessage=function(a){"encode"===a.datatype?postMessage({id:a.data.id,res:d(a.data.e)}):postMessage({id:a.data.id,res:e(a.data.e)})}}(this);'], {
             type: 'application/javascript'
           }));
         } else if (root.window.Worker) {
@@ -28,21 +27,19 @@ export class base64 {
         }
 
         if (this._supportWebWorker) {
-          const self     = this;
           this._worker   = new root.window.Worker(this._webWorkerUrl);
           this._handlers = {};
-          this._worker.onmessage = function (e) {
-            const _data = e.data.split('|-|');
-            if (self._handlers[_data[0]]) {
-              self._handlers[_data[0]](null, _data[1]);
-              delete self._handlers[_data[0]];
+          this._worker.onmessage = (e) => {
+            if (this._handlers[e.data.id]) {
+              this._handlers[e.data.id](null, e.data.res);
+              delete this._handlers[e.data.id];
             }
           };
 
-          this._worker.onerror = function (e) {
+          this._worker.onerror = (e) => {
             console.error('[ostrio:base64] WebWorker Error', e);
-            self._worker.terminate();
-            self._handlers = {};
+            this._worker.terminate();
+            this._handlers = {};
           };
         }
       }
@@ -61,8 +58,11 @@ export class base64 {
     this._handlers[id] = cb;
   }
   encode(e, cb) {
+    if (e.length === 0) {
+      return '';
+    }
     if (this.isNode && this.useNative) {
-      if (typeof Buffer.from === "function") {
+      if (typeof Buffer.from === 'function') {
         return Buffer.from(e, 'utf8').toString('base64');
       } else {
         return new Buffer(e, 'utf8').toString('base64');
@@ -74,20 +74,11 @@ export class base64 {
       return root.window.btoa(e);
     } else {
       if (cb && this._supportWebWorker) {
-        const id = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+        const id = _floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + _floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + _floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + _floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
         this._registerHandler(id, cb);
-        // this._worker.postMessage({op: 'encode', str: e, id});
-        this._worker.postMessage(`encode|-|${id}|-|${e}`);
+        this._worker.postMessage({type: 'encode', id: id, e: e});
       } else {
-        let t = "";
-        let n;
-        let r;
-        let i;
-        let s;
-        let o;
-        let u;
-        let a;
-        let f = 0;
+        let t = '', n, r, i, s, o, u, a, f = 0;
         if (this._isUnicode(e)){
           e = this._utf8_encode(e);
         }
@@ -116,9 +107,12 @@ export class base64 {
   }
 
   decode(e, cb) {
-    e = e.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+    if (e.length === 0) {
+      return '';
+    }
+    e = e.replace(/[^A-Za-z0-9\+\/\=]/g, '');
     if (this.isNode && this.useNative) {
-      if (typeof Buffer.from === "function") {
+      if (typeof Buffer.from === 'function') {
         return Buffer.from(e, 'base64').toString('utf8');
       } else {
         return new Buffer(e, 'base64').toString('utf8');
@@ -127,19 +121,11 @@ export class base64 {
       return this._utf8_decode(root.window.atob(e));
     } else {
       if (cb && this._supportWebWorker) {
-        const id = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+        const id = _floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + _floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + _floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + _floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
         this._registerHandler(id, cb);
-        this._worker.postMessage(`decode|-|${id}|-|${e}`);
+        this._worker.postMessage({type: 'decode', id: id, e: e});
       } else {
-        let t = "";
-        let n;
-        let r;
-        let i;
-        let s;
-        let o;
-        let u;
-        let a;
-        let f = 0;
+        let t = '', n, r, i, s, o, u, a, f = 0;
         while (f < e.length) {
           s = this._keyStr.indexOf(e.charAt(f++));
           o = this._keyStr.indexOf(e.charAt(f++));
@@ -171,8 +157,8 @@ export class base64 {
   }
 
   _utf8_encode(e) {
-    e = e.replace(/\r\n/g, "\n");
-    let t = "";
+    e = e.replace(/\r\n/g, '\n');
+    let t = '';
     for (let n = 0; n < e.length; n++) {
       const r = e.charCodeAt(n);
       if (r < 128) {
@@ -190,11 +176,7 @@ export class base64 {
   }
 
   _utf8_decode(e) {
-    let t = "";
-    let n = 0;
-    let r = 0;
-    let c2 = 0;
-    let c3 = 0;
+    let t = '', n = 0, r = 0, c2 = 0, c3 = 0;
     while (n < e.length) {
       r = e.charCodeAt(n);
       if (r < 128) {
