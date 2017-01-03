@@ -1,9 +1,9 @@
 ;(function(root) {
-  "use strict";
+  'use strict';
   var ascii   = /^[ -~\t\n\r]+$/;
-  var _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  var _keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
   var encode  = function (e) {
-    var t = "", n, r, i, s, o, u, a, f = 0;
+    var t = '', n, r, i, s, o, u, a, f = 0;
     if (_isUnicode(e)) {
       e = _utf8_encode(e);
     }
@@ -26,7 +26,7 @@
   };
 
   var decode = function (e) {
-    var t = "", n, r, i, s, o, u, a, f = 0;
+    var t = '', n, r, i, s, o, u, a, f = 0;
     while (f < e.length) {
       s = _keyStr.indexOf(e.charAt(f++));
       o = _keyStr.indexOf(e.charAt(f++));
@@ -51,8 +51,8 @@
   };
 
   var _utf8_encode = function (e) {
-    e = e.replace(/\r\n/g, "\n");
-    var t = "";
+    e = e.replace(/\r\n/g, '\n');
+    var t = '';
     for (var n = 0; n < e.length; n++) {
       var r = e.charCodeAt(n);
       if (r < 128) {
@@ -70,7 +70,7 @@
   };
 
   var _utf8_decode = function (e) {
-    var t = "", n = 0, r = 0, c2 = 0, c3 = 0;
+    var t = '', n = 0, r = 0, c2 = 0, c3 = 0;
     while (n < e.length) {
       r = e.charCodeAt(n);
       if (r < 128) {
@@ -91,11 +91,10 @@
   };
 
   root.onmessage = function(e) {
-    var _data = e.data.split('|-|');
-    if (_data[0] === 'encode') {
-      postMessage(_data[1] + '|-|' + encode(_data[2]));
+    if (e.datatype === 'encode') {
+      postMessage({id: e.data.id, res: encode(e.data.e)});
     } else {
-      postMessage(_data[1] + '|-|' + decode(_data[2]));
+      postMessage({id: e.data.id, res: decode(e.data.e)});
     }
   };
 }(this));
