@@ -17,7 +17,7 @@ Native code is disabled by default for both NodeJS and browser. Native code repr
 
 Native code support is disabled - as tests indicates up to 3x slower execution, than JS-implementation. To run tests - clone this repository and run `meteor test-packages ./`. To enable native code - use constructor in next form:
 
-```js
+```jsx
 // Note - first "b" (lowercase)
 import { base64 } from 'meteor/ostrio:base64';
 const nativeB64 = new base64(true, true);
@@ -29,27 +29,27 @@ WebWorker is enabled by default, for all `encode/decode` calls with callback. We
 
 # API
 #### `Base64.encode(plainString [, callback])`
-```js
+```jsx
 Base64.encode('My Plain String'); // Returns 'TXkgUGxhaW4gU3RyaW5n'
 
 // Async, non-blocking via WebWorker (if supported) at browser:
-Base64.encode('My Plain String', function (error, b64) {
+Base64.encode('My Plain String', (error, b64) => {
   // b64 === 'TXkgUGxhaW4gU3RyaW5n'
 });
 ```
 
 #### `Base64.decode(base64EncodedString [, callback])`
-```js
+```jsx
 Base64.decode('TXkgUGxhaW4gU3RyaW5n'); // Returns 'My Plain String'
 
 // Async, non-blocking via WebWorker (if supported) at browser:
-Base64.decode('TXkgUGxhaW4gU3RyaW5n', function (error, str) {
+Base64.decode('TXkgUGxhaW4gU3RyaW5n', (error, str) => {
   // str === 'My Plain String'
 });
 ```
 
 #### Constructor `new base64([allowWebWorker, useNative])`
-```js
+```jsx
 // Note - first "b" (lowercase)
 import { base64 } from 'meteor/ostrio:base64';
 // Native with WebWorker
@@ -63,7 +63,7 @@ const mtB64 = new base64(false);
 ```
 
 
-# 100% Test coverage
+# 100% Tests coverage
 To run build-in tests clone this repository and run:
 ```shell
 meteor test-packages ./
