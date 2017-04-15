@@ -201,7 +201,7 @@ Tinytest.addAsync('Base64.decode() - speed (see console) - async (WebWorker) - u
         s = getTime();
       } else if (f >= 10000) {
         test.equal(str, '小飼弾');
-        console.info(`Decode async unicode: ${getTime()- s}ms`);
+        console.info(`Decode async unicode: ${getTime() - s}ms`);
         next();
       }
     });

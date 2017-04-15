@@ -1,3 +1,5 @@
+import { Meteor } from 'meteor/meteor';
+
 const root = this;
 const fromCharCode = String.fromCharCode;
 const _floor = (num) => {
@@ -124,7 +126,13 @@ class base64 {
   }
 
   _encode(e) {
-    let res = '', n, r, i, u, a, f = 0;
+    let res = '';
+    let n;
+    let r;
+    let i;
+    let u;
+    let a;
+    let f = 0;
     while (f < e.length) {
       n = e.charCodeAt(f++);
       r = e.charCodeAt(f++);
@@ -143,7 +151,9 @@ class base64 {
 
   _utf8Encode(e) {
     e = e.replace(/\r\n/g, '\n');
-    let res = '', n, r;
+    let res = '';
+    let n;
+    let r;
     for (n = 0; n < e.length; n++) {
       r = e.charCodeAt(n);
       if (r < 128) {
@@ -161,7 +171,12 @@ class base64 {
   }
 
   _decode(e) {
-    let res = '', s, o, u, a, f = 0;
+    let res = '';
+    let s;
+    let o;
+    let u;
+    let a;
+    let f = 0;
     while (f < e.length) {
       s = this._keyTab[e.charAt(f++)];
       o = this._keyTab[e.charAt(f++)];
@@ -179,7 +194,9 @@ class base64 {
   }
 
   _utf8Decode(e) {
-    let res = '', n = 0, r = 0;
+    let res = '';
+    let n = 0;
+    let r = 0;
     while (n < e.length) {
       r = e.charCodeAt(n);
       if (r < 128) {
