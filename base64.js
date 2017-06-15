@@ -17,33 +17,37 @@ class base64 {
     if (this._allowWebWorker) {
       if (!this.isNode) {
         const _URL = root.window.URL || root.window.webkitURL || root.window.mozURL || root.window.msURL || root.window.oURL || false;
-        if (root.window.Worker && root.window.Blob && _URL) {
-          this._supportWebWorker = true;
-          this._webWorkerUrl = _URL.createObjectURL(new root.window.Blob([";(function(c){'use strict';var d=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/','='];var g={0:52,1:53,2:54,3:55,4:56,5:57,6:58,7:59,8:60,9:61,A:0,B:1,C:2,D:3,E:4,F:5,G:6,H:7,I:8,J:9,K:10,L:11,M:12,N:13,O:14,P:15,Q:16,R:17,S:18,T:19,U:20,V:21,W:22,X:23,Y:24,Z:25,a:26,b:27,c:28,d:29,e:30,f:31,g:32,h:33,i:34,j:35,k:36,l:37,m:38,n:39,o:40,p:41,q:42,r:43,s:44,t:45,u:46,v:47,w:48,x:49,y:50,z:51,'+':62,'/':63,'=':64};var h=String.fromCharCode;var j=function(e){var b='',n,r,i,u,a,f=0;while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}b+=d[n>>2]+d[(n&3)<<4|r>>4]+d[u]+d[a]}return b};var k=function(e){e=e.replace(/\\r\\n/g,'\\n');var a='',n,r;for(n=0;n<e.length;n++){r=e.charCodeAt(n);if(r<128){a+=h(r)}else if(r>127&&r<2048){a+=h(r>>6|192);a+=h(r&63|128)}else{a+=h(r>>12|224);a+=h(r>>6&63|128);a+=h(r&63|128)}}return a};var l=function(e){var b='',s,o,u,a,f=0;while(f<e.length){s=g[e.charAt(f++)];o=g[e.charAt(f++)];u=g[e.charAt(f++)];a=g[e.charAt(f++)];b+=h(s<<2|o>>4);if(u!=64){b+=h((o&15)<<4|u>>2)}if(a!=64){b+=h((u&3)<<6|a)}}return b};var m=function(e){var a='',n=0,r=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){a+=h(r);n++}else if(r>191&&r<224){a+=h((r&31)<<6|e.charCodeAt(n+1)&63);n+=2}else{a+=h((r&15)<<12|(e.charCodeAt(n+1)&63)<<6|e.charCodeAt(n+2)&63);n+=3}}return a};c.onmessage=function(e){if(e.data.type==='encode'){postMessage({id:e.data.id,res:j(k(e.data.e))})}else{postMessage({id:e.data.id,res:m(l(e.data.e))})}}})(this);"], {
-            type: 'application/javascript'
-          }));
-        } else if (root.window.Worker) {
-          this._supportWebWorker = true;
-          this._webWorkerUrl = Meteor.absoluteUrl('packages/ostrio_base64/worker.min.js');
-        } else {
-          this._supportWebWorker = false;
-        }
+        try {
+          if (root.window.Worker && root.window.Blob && _URL) {
+            this._supportWebWorker = true;
+            this._webWorkerUrl = _URL.createObjectURL(new root.window.Blob(["!function(t){'use strict';var r=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/','='],e={0:52,1:53,2:54,3:55,4:56,5:57,6:58,7:59,8:60,9:61,A:0,B:1,C:2,D:3,E:4,F:5,G:6,H:7,I:8,J:9,K:10,L:11,M:12,N:13,O:14,P:15,Q:16,R:17,S:18,T:19,U:20,V:21,W:22,X:23,Y:24,Z:25,a:26,b:27,c:28,d:29,e:30,f:31,g:32,h:33,i:34,j:35,k:36,l:37,m:38,n:39,o:40,p:41,q:42,r:43,s:44,t:45,u:46,v:47,w:48,x:49,y:50,z:51,'+':62,'/':63,'=':64},a=String.fromCharCode,n=function(t){for(var e,a,n,o,c,d='',h=0;h<t.length;)e=t.charCodeAt(h++),o=(15&(a=t.charCodeAt(h++)))<<2|(n=t.charCodeAt(h++))>>6,c=63&n,isNaN(a)?o=c=64:isNaN(n)&&(c=64),d+=r[e>>2]+r[(3&e)<<4|a>>4]+r[o]+r[c];return d},o=function(t){t=t.replace(/\\r\\n/g,'\\n');var r,e,n='';for(r=0;r<t.length;r++)(e=t.charCodeAt(r))<128?n+=a(e):e>127&&e<2048?(n+=a(e>>6|192),n+=a(63&e|128)):(n+=a(e>>12|224),n+=a(e>>6&63|128),n+=a(63&e|128));return n},c=function(t){for(var r,n,o,c,d='',h=0;h<t.length;)r=e[t.charAt(h++)],n=e[t.charAt(h++)],o=e[t.charAt(h++)],c=e[t.charAt(h++)],d+=a(r<<2|n>>4),64!=o&&(d+=a((15&n)<<4|o>>2)),64!=c&&(d+=a((3&o)<<6|c));return d},d=function(t){for(var r='',e=0,n=0;e<t.length;)(n=t.charCodeAt(e))<128?(r+=a(n),e++):n>191&&n<224?(r+=a((31&n)<<6|63&t.charCodeAt(e+1)),e+=2):(r+=a((15&n)<<12|(63&t.charCodeAt(e+1))<<6|63&t.charCodeAt(e+2)),e+=3);return r};addEventListener('message',function(t){'encode'===t.data.type?postMessage({id:t.data.id,res:n(o(t.data.e))}):postMessage({id:t.data.id,res:d(c(t.data.e))})})}();"], {
+              type: 'application/javascript'
+            }));
+          } else if (root.window.Worker) {
+            this._supportWebWorker = true;
+            this._webWorkerUrl = Meteor.absoluteUrl('packages/ostrio_base64/worker.min.js');
+          } else {
+            this._supportWebWorker = false;
+          }
 
-        if (this._supportWebWorker) {
-          this._worker   = new root.window.Worker(this._webWorkerUrl);
-          this._handlers = {};
-          this._worker.onmessage = (e) => {
-            if (this._handlers[e.data.id]) {
-              this._handlers[e.data.id](null, e.data.res);
-              delete this._handlers[e.data.id];
-            }
-          };
-
-          this._worker.onerror = (e) => {
-            console.error('[ostrio:base64] WebWorker Error', e);
-            this._worker.terminate();
+          if (this._supportWebWorker) {
+            this._worker   = new root.window.Worker(this._webWorkerUrl);
             this._handlers = {};
-          };
+            this._worker.onmessage = (e) => {
+              if (this._handlers[e.data.id]) {
+                this._handlers[e.data.id](null, e.data.res);
+                delete this._handlers[e.data.id];
+              }
+            };
+
+            this._worker.onerror = (e) => {
+              console.error('[ostrio:base64] WebWorker Error', e);
+              this._worker.terminate();
+              this._handlers = {};
+            };
+          }
+        } catch (e) {
+          this._supportWebWorker = false;
         }
       }
     }

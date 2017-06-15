@@ -77,11 +77,11 @@
     return res;
   };
 
-  root.onmessage = function (e) {
+  addEventListener('message', function(e) {
     if (e.data.type === 'encode') {
       postMessage({id: e.data.id, res: _encode(_utf8Encode(e.data.e))});
     } else {
       postMessage({id: e.data.id, res: _utf8Decode(_decode(e.data.e))});
     }
-  };
+  });
 })(this);
