@@ -1,6 +1,6 @@
 Isomorphic Base64 implementation
 =====
-Isomorphic implementation of Base64 string encoding and decoding. With the support of Unicode, and non-blocking execution via WebWorker. This library has 100% tests coverage, including speed tests.
+Highly efficient isomorphic implementation of Base64 string encoding and decoding. With the support of Unicode, and non-blocking execution via WebWorker. This library has 100% tests coverage, including speed tests.
 
 Installation
 =====
@@ -16,7 +16,7 @@ import { Base64 } from 'meteor/ostrio:base64';
 
 Native code support
 =====
-Native code is disabled by default for both NodeJS and browser. Native code represented as `atob, btoa` (*with extension to support Unicode*) at a browser, and `Buffer` at NodeJS. Both versions of `new Buffer` via *Constructor* and `Buffer.from` is supported for node >= 7.\*.
+Native code is disabled by default for both NodeJS and browser. Native code represented as `atob, btoa` (*with extension to support Unicode*) in a browser, and `Buffer` at NodeJS. Both versions of `new Buffer` via *Constructor* and `Buffer.from` is supported for node >= 7.\*.
 
 Native code support is disabled - as tests indicate up to 3x slower execution than JS-implementation. To run tests - clone this repository and run `meteor test-packages ./`. To enable native code - use constructor in next form:
 

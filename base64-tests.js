@@ -1,7 +1,25 @@
 import { Base64, base64 } from 'meteor/ostrio:base64';
-const nativeA2B = new base64(true, true);
+const nativeA2B  = new base64(true, true);
+const genStr     = (len) => {
+  let result = '';
+  const base = 'asdfghjk12345678asdfghjk12345678asdfghjk12345678';
+  const iterations = Math.ceil(len / 48);
+  for (let i = 0; i < iterations; i++) {
+    result += base;
+  }
+  return result;
+}
 
-var getTime = function() {
+const strs = {
+  str1024: genStr(1024),
+  str5120: genStr(5120),
+  str10240: genStr(10240),
+  str4k: genStr(1024 * 48),
+  str20k: genStr(5120 * 48),
+  str45k: genStr(10240 * 48)
+};
+
+const getTime = function() {
   return (this.window && this.window.performance && this.window.performance.now) ? this.window.performance.now() : +(new Date());
 };
 
@@ -9,7 +27,7 @@ Tinytest.add('Base64.encode() - essential', function (test) {
   test.equal(Base64.encode('My Plain String'), 'TXkgUGxhaW4gU3RyaW5n');
 });
 
-Tinytest.add('Base64.encode() - speed (see console) - default', function () {
+Tinytest.add('Base64.encode() - speed (see console) - default - short 10k times', function () {
   const s = getTime();
   let a = 0;
   while (a < 10000) {
@@ -19,7 +37,19 @@ Tinytest.add('Base64.encode() - speed (see console) - default', function () {
   console.info(`Encode: ${getTime() - s}ms`);
 });
 
-Tinytest.add('Base64.encode() - speed (see console) - using Native Code', function () {
+for (let name in strs) {
+  Tinytest.add(`Base64.encode() - speed (see console) - default - ${name}`, function () {
+    const s = getTime();
+    let a = 0;
+    while (a < 100) {
+      Base64.encode(strs[name]);
+      a++;
+    }
+    console.info(`Encode (${name}): ${getTime() - s}ms`);
+  });
+}
+
+Tinytest.add('Base64.encode() - speed (see console) - using Native Code - short 10k times', function () {
   const s = getTime();
   let a = 0;
   while (a < 10000) {
@@ -29,7 +59,16 @@ Tinytest.add('Base64.encode() - speed (see console) - using Native Code', functi
   console.info(`Encode using Native Code: ${getTime() - s}ms`);
 });
 
-Tinytest.addAsync('Base64.encode() - speed (see console) - async (WebWorker) - default', function (test, next) {
+for (let name in strs) {
+  Tinytest.add(`Base64.encode() - speed (see console) - using Native Code - ${name}`, function () {
+    const s = getTime();
+    let a = 0;
+    nativeA2B.encode(strs[name]);
+    console.info(`Encode using Native Code (${name}): ${getTime() - s}ms`);
+  });
+}
+
+Tinytest.addAsync('Base64.encode() - speed (see console) - async (WebWorker) - default - short 10k times', function (test, next) {
   let a = 0;
   let f = 0;
   let s = 0;
@@ -47,6 +86,16 @@ Tinytest.addAsync('Base64.encode() - speed (see console) - async (WebWorker) - d
     a++;
   }
 });
+
+for (let name in strs) {
+  Tinytest.addAsync(`Base64.encode() - speed (see console) - async (WebWorker) - default - ${name}`, function (test, next) {
+    let s = getTime();
+    Base64.encode(strs[name], (error, str) => {
+      console.info(`Encode async (${name}): ${getTime() - s}ms`);
+      next();
+    });
+  });
+}
 
 Tinytest.add('Base64.decode() - essential', function (test) {
   test.equal(Base64.decode('TXkgUGxhaW4gU3RyaW5n'), 'My Plain String');

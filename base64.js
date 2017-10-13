@@ -2,9 +2,6 @@ import { Meteor } from 'meteor/meteor';
 
 const root = this;
 const fromCharCode = String.fromCharCode;
-const _floor = (num) => {
-  return num | 0;
-};
 
 class base64 {
   constructor(allowWebWorker, useNative) {
@@ -20,10 +17,11 @@ class base64 {
         try {
           if (root.window.Worker && root.window.Blob && _URL) {
             this._supportWebWorker = true;
-            this._webWorkerUrl = _URL.createObjectURL(new root.window.Blob(["!function(t){'use strict';var r=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/','='],e={0:52,1:53,2:54,3:55,4:56,5:57,6:58,7:59,8:60,9:61,A:0,B:1,C:2,D:3,E:4,F:5,G:6,H:7,I:8,J:9,K:10,L:11,M:12,N:13,O:14,P:15,Q:16,R:17,S:18,T:19,U:20,V:21,W:22,X:23,Y:24,Z:25,a:26,b:27,c:28,d:29,e:30,f:31,g:32,h:33,i:34,j:35,k:36,l:37,m:38,n:39,o:40,p:41,q:42,r:43,s:44,t:45,u:46,v:47,w:48,x:49,y:50,z:51,'+':62,'/':63,'=':64},a=String.fromCharCode,n=function(t){for(var e,a,n,o,c,d='',h=0;h<t.length;)e=t.charCodeAt(h++),o=(15&(a=t.charCodeAt(h++)))<<2|(n=t.charCodeAt(h++))>>6,c=63&n,isNaN(a)?o=c=64:isNaN(n)&&(c=64),d+=r[e>>2]+r[(3&e)<<4|a>>4]+r[o]+r[c];return d},o=function(t){t=t.replace(/\\r\\n/g,'\\n');var r,e,n='';for(r=0;r<t.length;r++)(e=t.charCodeAt(r))<128?n+=a(e):e>127&&e<2048?(n+=a(e>>6|192),n+=a(63&e|128)):(n+=a(e>>12|224),n+=a(e>>6&63|128),n+=a(63&e|128));return n},c=function(t){for(var r,n,o,c,d='',h=0;h<t.length;)r=e[t.charAt(h++)],n=e[t.charAt(h++)],o=e[t.charAt(h++)],c=e[t.charAt(h++)],d+=a(r<<2|n>>4),64!=o&&(d+=a((15&n)<<4|o>>2)),64!=c&&(d+=a((3&o)<<6|c));return d},d=function(t){for(var r='',e=0,n=0;e<t.length;)(n=t.charCodeAt(e))<128?(r+=a(n),e++):n>191&&n<224?(r+=a((31&n)<<6|63&t.charCodeAt(e+1)),e+=2):(r+=a((15&n)<<12|(63&t.charCodeAt(e+1))<<6|63&t.charCodeAt(e+2)),e+=3);return r};addEventListener('message',function(t){'encode'===t.data.type?postMessage({id:t.data.id,res:n(o(t.data.e))}):postMessage({id:t.data.id,res:d(c(t.data.e))})})}();"], {
+            this._webWorkerUrl = _URL.createObjectURL(new root.window.Blob(["!function(){'use strict';var t=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/','='],r={0:52,1:53,2:54,3:55,4:56,5:57,6:58,7:59,8:60,9:61,A:0,B:1,C:2,D:3,E:4,F:5,G:6,H:7,I:8,J:9,K:10,L:11,M:12,N:13,O:14,P:15,Q:16,R:17,S:18,T:19,U:20,V:21,W:22,X:23,Y:24,Z:25,a:26,b:27,c:28,d:29,e:30,f:31,g:32,h:33,i:34,j:35,k:36,l:37,m:38,n:39,o:40,p:41,q:42,r:43,s:44,t:45,u:46,v:47,w:48,x:49,y:50,z:51,'+':62,'/':63,'=':64},e=String.fromCharCode,a=function(r){for(var e,a,n,o,c,d='',h=0;h<r.length;)e=r.charCodeAt(h++),o=(15&(a=r.charCodeAt(h++)))<<2|(n=r.charCodeAt(h++))>>6,c=63&n,isNaN(a)?o=c=64:isNaN(n)&&(c=64),d+=t[e>>2]+t[(3&e)<<4|a>>4]+t[o]+t[c];return d},n=function(t){var r,a,n=t.replace(/\\r\\n/g,'\\n'),o='';for(r=0;r<n.length;r++)(a=n.charCodeAt(r))<128?o+=e(a):a>127&&a<2048?(o+=e(a>>6|192),o+=e(63&a|128)):(o+=e(a>>12|224),o+=e(a>>6&63|128),o+=e(63&a|128));return o},o=function(t){for(var a,n,o,c,d='',h=0;h<t.length;)a=r[t.charAt(h++)],n=r[t.charAt(h++)],o=r[t.charAt(h++)],c=r[t.charAt(h++)],d+=e(a<<2|n>>4),64!==o&&(d+=e((15&n)<<4|o>>2)),64!==c&&(d+=e((3&o)<<6|c));return d},c=function(t){for(var r='',a=0,n=0;a<t.length;)(n=t.charCodeAt(a))<128?(r+=e(n),a++):n>191&&n<224?(r+=e((31&n)<<6|63&t.charCodeAt(a+1)),a+=2):(r+=e((15&n)<<12|(63&t.charCodeAt(a+1))<<6|63&t.charCodeAt(a+2)),a+=3);return r};addEventListener('message',function(t){'encode'===t.data.type?postMessage({id:t.data.id,res:a(n(t.data.e))}):postMessage({id:t.data.id,res:c(o(t.data.e))})})}();"], {
               type: 'application/javascript'
             }));
-          } else if (root.window.Worker) {
+          } else 
+          if (root.window.Worker) {
             this._supportWebWorker = true;
             this._webWorkerUrl = Meteor.absoluteUrl('packages/ostrio_base64/worker.min.js');
           } else {
@@ -44,6 +42,7 @@ class base64 {
               console.error('[ostrio:base64] WebWorker Error', e);
               this._worker.terminate();
               this._handlers = {};
+              this._supportWebWorker = false;
             };
           }
         } catch (e) {
@@ -153,8 +152,8 @@ class base64 {
     return res;
   }
 
-  _utf8Encode(e) {
-    e = e.replace(/\r\n/g, '\n');
+  _utf8Encode(_e) {
+    const e = _e.replace(/\r\n/g, '\n');
     let res = '';
     let n;
     let r;
@@ -187,10 +186,10 @@ class base64 {
       u = this._keyTab[e.charAt(f++)];
       a = this._keyTab[e.charAt(f++)];
       res += fromCharCode(s << 2 | o >> 4);
-      if (u != 64) {
+      if (u !== 64) {
         res += fromCharCode((o & 15) << 4 | u >> 2);
       }
-      if (a != 64) {
+      if (a !== 64) {
         res += fromCharCode((u & 3) << 6 | a);
       }
     }
@@ -218,9 +217,9 @@ class base64 {
   }
 
   _getId() {
-    return _floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + _floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + _floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + '-' + _floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+    return Math.random().toString(36).slice(2, 18);
   }
 }
 
 const Base64 = new base64();
-export {Base64, base64};
+export { Base64, base64 };

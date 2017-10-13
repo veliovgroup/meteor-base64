@@ -1,6 +1,6 @@
 Package.describe({
   name: 'ostrio:base64',
-  version: '1.2.2',
+  version: '1.2.3',
   summary: 'Efficient isomorphic Base64 implementation, with support of WebWorkers, Native code and Unicode',
   git: 'https://github.com/VeliovGroup/meteor-base64',
   documentation: 'README.md'
