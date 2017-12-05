@@ -320,17 +320,17 @@ Tinytest.add('MDG - With WebWorkers - non-text examples', function (test) {
 });
 
 Meteor.setTimeout(() => {
-  const m_timings = {};
+  const mTimings = {};
   const method = [];
   Object.keys(timings).forEach((k) => {
     method.push(timings[k]);
-    m_timings[timings[k]] = k;
+    mTimings[timings[k]] = k;
   });
-  console.log(m_timings);
+  console.log(mTimings);
 
   const fmethod = Math.min(...method);
-  console.warn('Fastest method: ', fmethod, m_timings[fmethod]);
+  console.warn('Fastest method: ', fmethod, mTimings[fmethod]);
 
   const smethod = Math.max(...method);
-  console.warn('Slowest method: ', smethod, m_timings[smethod]);
-}, 25000);
+  console.warn('Slowest method: ', smethod, mTimings[smethod]);
+}, 30000);
