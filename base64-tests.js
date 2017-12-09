@@ -30,7 +30,7 @@ const strs = {
 };
 
 const encoders = {
-  Default_Base64_Class: Base64,
+  // Default_Base64_Class: Base64,
   JavaScript_Implementation_No_WebWorkers: jsImpl,
   JavaScript_Implementation_With_WebWorkers: jsImplBWW,
   Native_Implementation_No_WebWorkers: nativeA2B,
