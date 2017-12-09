@@ -74,15 +74,11 @@ class base64 {
       res = '';
     } else {
       if (this._ejsonCompatible && typeof res !== 'string') {
-        res = String.fromCharCode.apply(null, res);
+        res = fromCharCode.apply(null, res);
       }
 
       if (this._isNode && this._useNative) {
-        if (typeof Buffer.from === 'function') {
-          res = Buffer.from(res, 'utf8').toString('base64');
-        } else {
-          res = new Buffer(res, 'utf8').toString('base64');
-        }
+        res = Buffer.from(res, 'utf8').toString('base64');
       } else if (cb && !this._isNode && this._supportWebWorker) {
         const id = base64._getId();
         this._registerHandler(id, cb);
@@ -108,7 +104,7 @@ class base64 {
       res = '';
     } else {
       if (this._ejsonCompatible && typeof res !== 'string') {
-        res = String.fromCharCode.apply(null, res);
+        res = fromCharCode.apply(null, res);
       }
 
       if (this._isNode && this._useNative) {
@@ -248,26 +244,25 @@ class base64 {
     return Math.random().toString(36).slice(2, 18);
   }
 
+  static uint8Polyfill(len) {
+    const ret = [];
+    for (let i = 0; i < len; i++) {
+      ret.push(0);
+    }
+    ret.$Uint8ArrayPolyfill = true;
+    return ret;
+  }
+
   static newUint8Array(len) {
     if (typeof Uint8Array === 'undefined') {
-      const ret = [];
-      for (let i = 0; i < len; i++) {
-        ret.push(0);
-      }
-      ret.$Uint8ArrayPolyfill = true;
-      return ret;
+      return base64.uint8Polyfill(len);
     }
     return new Uint8Array(len);
   }
 
   static newBinary(len) {
     if (typeof Uint8Array === 'undefined' || typeof ArrayBuffer === 'undefined') {
-      const ret = [];
-      for (let i = 0; i < len; i++) {
-        ret.push(0);
-      }
-      ret.$Uint8ArrayPolyfill = true;
-      return ret;
+      return base64.uint8Polyfill(len);
     }
     return new Uint8Array(new ArrayBuffer(len));
   }
