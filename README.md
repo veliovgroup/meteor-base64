@@ -3,12 +3,12 @@ Isomorphic Base64 implementation
 Highly efficient isomorphic implementation of Base64 string encoding and decoding. With the support of Unicode, and non-blocking execution via WebWorker. This library has 100% tests coverage, including speed tests.
 
 ### Features
- 1. __100%__ tests coverage
+ 1. [__100%__ tests coverage](https://github.com/VeliovGroup/meteor-base64/tree/dev#100-tests-coverage)
  2. Isomorphic, same API for *Server* and *Browser*
- 3. Blazing fast, see [speed tests]()
- 4. Non-blocking browser experience, via WebWorkers
- 5. No external dependencies
- 6. Could [replace default Meteor's `base64` package]()
+ 3. Blazing fast, see [speed tests](https://github.com/VeliovGroup/meteor-base64/tree/dev#100-tests-coverage)
+ 4. [Non-blocking browser experience](https://github.com/VeliovGroup/meteor-base64/tree/dev#non-blocking-via-webworker), via WebWorkers
+ 5. [No external dependencies](https://github.com/VeliovGroup/meteor-base64/blob/dev/package.js#L9)
+ 6. Could [replace default Meteor's `base64` package](https://github.com/VeliovGroup/meteor-base64/tree/dev#default-base64-package-replacement)
 
 ### Installation
 ```shell
@@ -59,7 +59,8 @@ Base64.decode('TXkgUGxhaW4gU3RyaW5n', (error, str) => {
 ##### Constructor `new base64({ allowWebWorker, useNative, ejsonCompatible })`
  - `opts.allowWebWorker` {*Boolean*} - Default: `true`. Use *WebWorker* in a *Browser* if available;
  - `opts.useNative` {*Boolean*} - Default: `false`. Use native `atob`, `btoa` and `Buffer.from`, if available;
- - `opts.ejsonCompatible` {*Boolean*} - Default: `false`. Compatible mode with EJSON "binary" format, `.encode()` method will result as *Uint8Array* if `ejsonCompatible` is `true`;
+ - `opts.supportNonASCII` {*Boolean*} - Default: `true`. Decreases speed, but gives support for whole utf-8 table;
+ - `opts.ejsonCompatible` {*Boolean*} - Default: `false`. Compatible mode with EJSON "binary" format, `.encode()` method will result as *Uint8Array* if `ejsonCompatible` is `true`.
 ```jsx
 // Note - first "b" (lowercase)
 import { base64 } from 'meteor/ostrio:base64';
