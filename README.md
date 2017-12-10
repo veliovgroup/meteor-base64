@@ -75,8 +75,9 @@ const mtB64 = new base64({ allowWebWorker: false });
 ```
 
 ### Default `base64` package replacement
- 1. [`base64-replacement` package](https://github.com/VeliovGroup/meteor-base64-replacement/archive/master.zip) and place into `meteor-app/packages` directory, that's it. Run `meteor update` to make sure new package is applied
- 2. In case of version incompatibility, change [`base64-replacement` version](), to the latest available on the [mainstream channel](https://github.com/meteor/meteor/blob/devel/packages/base64/package.js#L3)
+ 1. Download [`base64-replacement` package](https://github.com/VeliovGroup/meteor-base64-replacement/archive/master.zip) and place into `meteor-app/packages` directory, that's it. Run `meteor update` to make sure new package is applied'
+ 2. In case of version incompatibility, change [`base64-replacement` version](https://github.com/VeliovGroup/meteor-base64-replacement/blob/master/package.js#L3), to the latest available on the [mainstream channel](https://github.com/meteor/meteor/blob/devel/packages/base64/package.js#L3);
+ 3. For more info see [`base64-replacement` package](https://github.com/VeliovGroup/meteor-base64-replacement)
 
 ### 100% Tests coverage
 To run built-in tests clone this repository and run:
