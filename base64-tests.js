@@ -7,8 +7,10 @@ const nativeA2B   = new base64({useNative: true, allowWebWorker: false});
 const nativeA2BWW = new base64({useNative: true, allowWebWorker: true});
 const jsImpl      = new base64({allowWebWorker: false, useNative: false});
 const jsImplBWW   = new base64({allowWebWorker: true, useNative: false});
-const meteorA2B   = new base64({allowWebWorker: false, useNative: false, ejsonCompatible: true});
-const meteorA2BWW = new base64({allowWebWorker: true, useNative: false, ejsonCompatible: true});
+const meteorASCII = new base64({allowWebWorker: false, useNative: false, supportNonASCII: false});
+const meteorASCIIWW = new base64({allowWebWorker: true, useNative: false, supportNonASCII: false});
+const meteorA2B   = new base64({allowWebWorker: false, useNative: false, ejsonCompatible: true, supportNonASCII: false});
+const meteorA2BWW = new base64({allowWebWorker: true, useNative: false, ejsonCompatible: true, supportNonASCII: false});
 const timings     = {};
 const genStr      = (len) => {
   let result = '';
@@ -36,7 +38,9 @@ const encoders = {
   Native_Implementation_No_WebWorkers: nativeA2B,
   Native_Implementation_With_WebWorkers: nativeA2BWW,
   'Meteor_compatible_No_WebWorkers [ASCII only]': meteorA2B,
-  'Meteor_compatible_With_WebWorkers [ASCII only]': meteorA2BWW
+  'Meteor_compatible_With_WebWorkers [ASCII only]': meteorA2BWW,
+  'JavaScript_Implementation_No_WebWorkers [ASCII only]': meteorASCII,
+  'JavaScript_Implementation_With_WebWorkers [ASCII only]': meteorASCIIWW
 };
 const encodersKeys = Object.keys(encoders);
 
@@ -77,7 +81,7 @@ const getTime = function() {
 };
 const speedtest = (name, func) => {
   const s   = getTime();
-  const max = 77;
+  const max = 100;
   let a     = 0;
 
   while (a < max) {
@@ -92,7 +96,7 @@ const speedtest = (name, func) => {
 
 const speedtestAsync = (name, func, done) => {
   const s   = getTime();
-  const max = 77;
+  const max = 100;
   let a     = 0;
 
   const run = () => {
@@ -110,42 +114,44 @@ const speedtestAsync = (name, func, done) => {
 
 let time;
 encodersKeys.forEach((encoderKey) => {
-  Tinytest.add(`Speed Tests - ${encoderKey} - Sync`, function (test) {
-    const func = () => encoders[encoderKey].decode(encoders[encoderKey].encode(strs.str4k));
-    time = speedtest(`Sync - ${encoderKey}`, func);
-    timings['sync-' + encoderKey] = timings['sync-' + encoderKey] || 0;
-    timings['sync-' + encoderKey] += time;
-    test.isTrue(true);
-  });
-
-  Tinytest.addAsync(`Speed Tests - ${encoderKey} - Async`, function (test, next) {
-    const func = (curr, max, run) => {
-      if (curr < max) {
-        encoders[encoderKey].encode(strs.str4k, (err, res) => {
-          test.isUndefined(err);
-          encoders[encoderKey].decode(res, (error, result) => {
-            test.isUndefined(error);
-            if (!!~encoderKey.indexOf('Meteor_compatible') && typeof result !== 'string') {
-              result = String.fromCharCode.apply(null, result);
-            }
-            test.isTrue(typeof result === 'string');
-            run();
-          });
-        });
-      } else {
-        run();
-      }
-    };
-
-    speedtestAsync(`Async - ${encoderKey}`, func, (timestamp) => {
-      timings['async-' + encoderKey] = timings['async-' + encoderKey] || 0;
-      timings['async-' + encoderKey] += timestamp;
-      next();
+  if (Meteor.isClient || Meteor.isServer && !~encoderKey.indexOf('With_WebWorkers')) {
+    Tinytest.add(`Speed Tests - ${encoderKey} - Sync`, function (test) {
+      const func = () => encoders[encoderKey].decode(encoders[encoderKey].encode(strs.str4k));
+      time = speedtest(`Sync - ${encoderKey}`, func);
+      timings['sync-' + encoderKey] = timings['sync-' + encoderKey] || 0;
+      timings['sync-' + encoderKey] += time;
+      test.isTrue(true);
     });
-  });
+
+    Tinytest.addAsync(`Speed Tests - ${encoderKey} - Async`, function (test, next) {
+      const func = (curr, max, run) => {
+        if (curr < max) {
+          encoders[encoderKey].encode(strs.str4k, (err, res) => {
+            test.isUndefined(err);
+            encoders[encoderKey].decode(res, (error, result) => {
+              test.isUndefined(error);
+              if (!!~encoderKey.indexOf('Meteor_compatible') && typeof result !== 'string') {
+                result = String.fromCharCode.apply(null, result);
+              }
+              test.isTrue(typeof result === 'string');
+              run();
+            });
+          });
+        } else {
+          run();
+        }
+      };
+
+      speedtestAsync(`Async - ${encoderKey}`, func, (timestamp) => {
+        timings['async-' + encoderKey] = timings['async-' + encoderKey] || 0;
+        timings['async-' + encoderKey] += timestamp;
+        next();
+      });
+    });
+  }
 
   testsStringsKeys.forEach((testKey) => {
-    if (!!~encoderKey.indexOf('Meteor_compatible') && !~testKey.indexOf('plain')) {
+    if (!!~encoderKey.indexOf('ASCII only') && !~testKey.indexOf('plain')) {
       return;
     }
 
