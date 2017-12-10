@@ -2,38 +2,41 @@ Isomorphic Base64 implementation
 =====
 Highly efficient isomorphic implementation of Base64 string encoding and decoding. With the support of Unicode, and non-blocking execution via WebWorker. This library has 100% tests coverage, including speed tests.
 
-Installation
-=====
+### Features
+ 1. __100%__ tests coverage
+ 2. Isomorphic, same API for *Server* and *Browser*
+ 3. Blazing fast, see [speed tests]()
+ 4. Non-blocking browser experience, via WebWorkers
+ 5. No external dependencies
+ 6. Could [replace default Meteor's `base64` package]()
+
+### Installation
 ```shell
 meteor add ostrio:base64
 ```
 
-ES6 Import
-=====
+### ES6 Import
 ```jsx
 import { Base64 } from 'meteor/ostrio:base64';
 ```
 
-Native code support
-=====
-Native code is disabled by default for both NodeJS and browser. Native code represented as `atob, btoa` (*with extension to support Unicode*) in a browser, and `Buffer` at NodeJS. Both versions of `new Buffer` via *Constructor* and `Buffer.from` is supported for node >= 7.\*.
+### Native code support
+Native code is disabled by default for both NodeJS and browser. Native code represented as `atob, btoa` (*with extension to support Unicode*) in a browser, and `Buffer` at NodeJS.
 
-Native code support is disabled - as tests indicate up to 3x slower execution than JS-implementation. To run tests - clone this repository and run `meteor test-packages ./`. To enable native code - use constructor in next form:
+Although native code is *10x times* faster, its support is disabled, as natively base64 encoding supports only ASCII symbols in a *Browser* and *Node.js*. To enable native code - use constructor in next form:
 
 ```jsx
 // Note - first "b" (lowercase)
 import { base64 } from 'meteor/ostrio:base64';
-const nativeB64 = new base64(true, true);
+const nativeB64 = new base64({ useNative: true });
 ```
 
-Non-blocking via WebWorker
-=====
+### Non-blocking via WebWorker
 WebWorker is enabled by default, for all `encode/decode` calls with the callback. WebWorker is used only if supported by a browser, otherwise, it will fall-back to the main thread. In the real-world application WebWorker, usage will gain you extra FPS, and UI will act more smoothly.
 
 
-API
-=====
-#### `Base64.encode(plainString [, callback])`
+### API
+##### `Base64.encode(plainString [, callback])`
 ```jsx
 Base64.encode('My Plain String'); // Returns 'TXkgUGxhaW4gU3RyaW5n'
 
@@ -43,7 +46,7 @@ Base64.encode('My Plain String', (error, b64) => {
 });
 ```
 
-#### `Base64.decode(base64EncodedString [, callback])`
+##### `Base64.decode(base64EncodedString [, callback])`
 ```jsx
 Base64.decode('TXkgUGxhaW4gU3RyaW5n'); // Returns 'My Plain String'
 
@@ -53,26 +56,37 @@ Base64.decode('TXkgUGxhaW4gU3RyaW5n', (error, str) => {
 });
 ```
 
-#### Constructor `new base64([allowWebWorker, useNative])`
+##### Constructor `new base64({ allowWebWorker, useNative, ejsonCompatible })`
+ - `opts.allowWebWorker` {*Boolean*} - Default: `true`. Use *WebWorker* in a *Browser* if available;
+ - `opts.useNative` {*Boolean*} - Default: `false`. Use native `atob`, `btoa` and `Buffer.from`, if available;
+ - `opts.ejsonCompatible` {*Boolean*} - Default: `false`. Compatible mode with EJSON "binary" format, `.encode()` method will result as *Uint8Array* if `ejsonCompatible` is `true`;
 ```jsx
 // Note - first "b" (lowercase)
 import { base64 } from 'meteor/ostrio:base64';
 // Native with WebWorker
-const nativeB64 = new base64(true, true);
+const nativeB64 = new base64({ allowWebWorker: true, useNative: true });
 
 // Native without WebWorker
-const mtNativeB64 = new base64(false, true);
+const mtNativeB64 = new base64({ allowWebWorker: false, useNative: true });
 
 // Use main thread, no WebWorker
-const mtB64 = new base64(false);
+const mtB64 = new base64({ allowWebWorker: false });
 ```
 
+### Default `base64` package replacement
+ 1. [`base64-replacement` package](https://github.com/VeliovGroup/meteor-base64-replacement/archive/master.zip) and place into `meteor-app/packages` directory, that's it. Run `meteor update` to make sure new package is applied
+ 2. In case of version incompatibility, change [`base64-replacement` version](), to the latest available on the [mainstream channel](https://github.com/meteor/meteor/blob/devel/packages/base64/package.js#L3)
 
-100% Tests coverage
-=====
+### 100% Tests coverage
 To run built-in tests clone this repository and run:
 ```shell
 meteor test-packages ./
 ```
 
-Tests include synchronous, asynchronous and speed tests for Browser and NodeJS, for cases with/out the Native code and/or WebWoker usage.
+Tests include synchronous, asynchronous and speed tests for Browser and NodeJS, for cases with/out the Native code and/or WebWorker usage.
+
+
+### Support this project:
+This project wouldn't be possible without [ostr.io](https://ostr.io).
+
+Using [ostr.io](https://ostr.io) you are not only [protecting domain names](https://ostr.io/info/domain-names-protection), [monitoring websites and servers](https://ostr.io/info/monitoring), using [Prerendering for better SEO](https://ostr.io/info/prerendering) of your JavaScript website, but support our Open Source activity, and great packages like this one could be available for free.
