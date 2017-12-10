@@ -100,9 +100,9 @@
 
   addEventListener('message', function(e) {
     if (e.data.type === 'encode') {
-      postMessage({id: e.data.id, res: _encode(_utf8Encode(e.data.e), e.data.n)});
+      postMessage({id: e.data.id, res: _encode((e.data.ascii ? _utf8Encode(e.data.e) : e.data.e), e.data.n)});
     } else {
-      postMessage({id: e.data.id, type: 'decode', res: _utf8Decode(_decode(e.data.e, e.data.n))});
+      postMessage({id: e.data.id, type: 'decode', res: e.data.ascii ? _utf8Decode(_decode(e.data.e, e.data.n)) : _decode(e.data.e, e.data.n)});
     }
   });
 })(this);
