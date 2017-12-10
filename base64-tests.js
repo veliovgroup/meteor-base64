@@ -3,16 +3,16 @@ import { EJSON }          from 'meteor/ejson';
 import { Meteor }         from 'meteor/meteor';
 import { Base64, base64 } from 'meteor/ostrio:base64';
 
-const nativeA2B   = new base64({useNative: true, allowWebWorker: false});
-const nativeA2BWW = new base64({useNative: true, allowWebWorker: true});
-const jsImpl      = new base64({allowWebWorker: false, useNative: false});
-const jsImplBWW   = new base64({allowWebWorker: true, useNative: false});
-const meteorASCII = new base64({allowWebWorker: false, useNative: false, supportNonASCII: false});
+const nativeA2B     = new base64({useNative: true, allowWebWorker: false});
+const nativeA2BWW   = new base64({useNative: true, allowWebWorker: true});
+const jsImpl        = new base64({allowWebWorker: false, useNative: false});
+const jsImplBWW     = new base64({allowWebWorker: true, useNative: false});
+const meteorASCII   = new base64({allowWebWorker: false, useNative: false, supportNonASCII: false});
 const meteorASCIIWW = new base64({allowWebWorker: true, useNative: false, supportNonASCII: false});
-const meteorA2B   = new base64({allowWebWorker: false, useNative: false, ejsonCompatible: true, supportNonASCII: false});
-const meteorA2BWW = new base64({allowWebWorker: true, useNative: false, ejsonCompatible: true, supportNonASCII: false});
-const timings     = {};
-const genStr      = (len) => {
+const meteorA2B     = new base64({allowWebWorker: false, useNative: false, ejsonCompatible: true, supportNonASCII: false});
+const meteorA2BWW   = new base64({allowWebWorker: true, useNative: false, ejsonCompatible: true, supportNonASCII: false});
+const timings       = {};
+const genStr        = (len) => {
   let result = '';
   const base = 'asdfghjk12345678asdfghjk12345678asdfghjk12345678';
   const iterations = Math.ceil(len / 48);
