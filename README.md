@@ -41,7 +41,11 @@ WebWorker is enabled by default, for all `encode/decode` calls with the callback
 
 ## API
 
-### `Base64.encode(plainString [, callback])`
+### `.encode()`
+
+```js
+Base64.encode(plainString [, callback]);
+```
 
 ```js
 Base64.encode('My Plain String'); // Returns 'TXkgUGxhaW4gU3RyaW5n'
@@ -52,7 +56,11 @@ Base64.encode('My Plain String', (error, b64) => {
 });
 ```
 
-### `Base64.decode(base64EncodedString [, callback])`
+### `.decode()`
+
+```js
+Base64.decode(base64EncodedString [, callback]);
+```
 
 ```js
 Base64.decode('TXkgUGxhaW4gU3RyaW5n'); // Returns 'My Plain String'
@@ -63,7 +71,11 @@ Base64.decode('TXkgUGxhaW4gU3RyaW5n', (error, str) => {
 });
 ```
 
-### Constructor `new base64({ allowWebWorker, useNative, supportNonASCII, ejsonCompatible })`
+### Constructor `new base64()`
+
+```js
+new base64({ allowWebWorker, useNative, supportNonASCII, ejsonCompatible });
+```
 
   - `opts.allowWebWorker` {*Boolean*} - Default: `true`. Use *WebWorker* in a *Browser* if available;
   - `opts.useNative` {*Boolean*} - Default: `false`. Use native `atob`, `btoa` and `Buffer.from`, if available;
