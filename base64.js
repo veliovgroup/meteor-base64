@@ -1,12 +1,12 @@
 import { Meteor }                from 'meteor/meteor';
 import createWebWorkerIfPossible from './worker-create.js';
 
-const root = this;
+const _root = this;
 const fromCharCode = String.fromCharCode;
 
 class base64 {
   constructor(opts = {}) {
-    this._isNode           = Meteor.isServer; // Save it for NPM release: (root.navigator || root.window) ? false : true;
+    this._isNode           = Meteor.isServer; // Save it for NPM release: (_root.navigator || _root.window) ? false : true;
     this._useNative        = (opts.useNative === undefined) ? false : opts.useNative;
     this._allowWebWorker   = (opts.allowWebWorker === undefined) ? true : opts.allowWebWorker;
     this._ejsonCompatible  = (opts.ejsonCompatible === undefined) ? false : opts.ejsonCompatible;
@@ -18,7 +18,7 @@ class base64 {
     }
 
     if (this._useNative && !this._isNode) {
-      this._useNative = !!(root.window.atob && root.window.btoa);
+      this._useNative = !!(_root.window.atob && _root.window.btoa);
     } else if (this._useNative && this._isNode) {
       this._useNative = true;
     } else {
@@ -52,7 +52,7 @@ class base64 {
         this._worker.postMessage({type: 'encode', n: this._useNative, ascii: this._supportNonASCII, id: id, e: res});
         return void 0;
       } else if (this._useNative && !this._isNode) {
-        res = root.window.btoa(this._supportNonASCII ? base64._utf8Encode(res) : res);
+        res = _root.window.btoa(this._supportNonASCII ? base64._utf8Encode(res) : res);
       } else {
         res = base64._encode(this._supportNonASCII ? base64._utf8Encode(res) : res);
       }
@@ -86,7 +86,7 @@ class base64 {
         this._worker.postMessage({type: 'decode', n: this._useNative, ascii: this._supportNonASCII, id: id, e: res});
         return void 0;
       } else if (this._useNative && !this._isNode) {
-        res = this._supportNonASCII ? base64._utf8Decode(root.window.atob(res)) : root.window.atob(res);
+        res = this._supportNonASCII ? base64._utf8Decode(_root.window.atob(res)) : _root.window.atob(res);
       } else {
         res = this._supportNonASCII ? base64._utf8Decode(base64._decode(res)) : base64._decode(res);
       }
