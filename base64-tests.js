@@ -71,7 +71,7 @@ const testsStrings = {
   },
   emojis: {
     t: '👨‍💻🤘🧐',
-    e: '7aC97bGo4oCN7aC97bK77aC+7bSY7aC+7beQ'
+    e: '7aC97bGo4oCN7aC97bK77aC+7bSY7aC+7beQ' // In some cases result equal to '8J+RqOKAjfCfkrvwn6SY8J+nkA=='
   }
 };
 const testsStringsKeys = Object.keys(testsStrings);
