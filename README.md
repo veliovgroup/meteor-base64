@@ -4,12 +4,12 @@ Highly efficient isomorphic implementation of Base64 string encoding and decodin
 
 ## Features
 
-  1. [__100%__ tests coverage](https://github.com/VeliovGroup/meteor-base64#100-tests-coverage)
-  2. Isomorphic, same API for *Server* and *Browser*
-  3. Blazing fast, see [speed tests](https://github.com/VeliovGroup/meteor-base64#100-tests-coverage)
-  4. [Non-blocking browser experience](https://github.com/VeliovGroup/meteor-base64#non-blocking-via-webworker), via WebWorkers
-  5. [No external dependencies](https://github.com/VeliovGroup/meteor-base64/blob/master/package.js#L9)
-  6. Could [replace default Meteor's `base64` package](https://github.com/VeliovGroup/meteor-base64#default-base64-package-replacement)
+1. [__100%__ tests coverage](https://github.com/VeliovGroup/meteor-base64#100-tests-coverage)
+2. Isomorphic, same API for *Server* and *Browser*
+3. Blazing fast, see [speed tests](https://github.com/VeliovGroup/meteor-base64#100-tests-coverage)
+4. [Non-blocking browser experience](https://github.com/VeliovGroup/meteor-base64#non-blocking-via-webworker), via WebWorkers
+5. [No external dependencies](https://github.com/VeliovGroup/meteor-base64/blob/master/package.js#L9)
+6. Could [replace default Meteor's `base64` package](https://github.com/VeliovGroup/meteor-base64#default-base64-package-replacement)
 
 ## Installation
 
@@ -48,6 +48,8 @@ Base64.encode(plainString [, callback]);
 ```
 
 ```js
+import { Base64 } from 'meteor/ostrio:base64';
+
 Base64.encode('My Plain String'); // Returns 'TXkgUGxhaW4gU3RyaW5n'
 
 // Async, non-blocking via WebWorker (if supported) at browser:
@@ -63,6 +65,8 @@ Base64.decode(base64EncodedString [, callback]);
 ```
 
 ```js
+import { Base64 } from 'meteor/ostrio:base64';
+
 Base64.decode('TXkgUGxhaW4gU3RyaW5n'); // Returns 'My Plain String'
 
 // Async, non-blocking via WebWorker (if supported) at browser:
@@ -77,10 +81,10 @@ Base64.decode('TXkgUGxhaW4gU3RyaW5n', (error, str) => {
 new base64({ allowWebWorker, useNative, supportNonASCII, ejsonCompatible });
 ```
 
-  - `opts.allowWebWorker` {*Boolean*} - Default: `true`. Use *WebWorker* in a *Browser* if available;
-  - `opts.useNative` {*Boolean*} - Default: `false`. Use native `atob`, `btoa` and `Buffer.from`, if available;
-  - `opts.supportNonASCII` {*Boolean*} - Default: `true`. Decreases speed, but gives support for whole utf-8 table;
-  - `opts.ejsonCompatible` {*Boolean*} - Default: `false`. Compatible mode with EJSON "binary" format, `.encode()` method will result as *Uint8Array* if `ejsonCompatible` is `true`.
+- `opts.allowWebWorker` {*Boolean*} - Default: `true`. Use *WebWorker* in a *Browser* if available;
+- `opts.useNative` {*Boolean*} - Default: `false`. Use native `atob`, `btoa` and `Buffer.from`, if available;
+- `opts.supportNonASCII` {*Boolean*} - Default: `true`. Decreases speed, but gives support for whole utf-8 table;
+- `opts.ejsonCompatible` {*Boolean*} - Default: `false`. Compatible mode with EJSON "binary" format, `.encode()` method will result as *Uint8Array* if `ejsonCompatible` is `true`.
 
 ```js
 // Note - first "b" (lowercase)
@@ -97,22 +101,27 @@ const mtB64 = new base64({ allowWebWorker: false });
 
 ## Default `base64` package replacement
 
-  1. Download [`base64-replacement` package](https://github.com/VeliovGroup/meteor-base64-replacement/archive/master.zip) and place into `meteor-app/packages` directory, that's it. Run `meteor update` to make sure new package is applied'
-  2. In case of version incompatibility, change [`base64-replacement` version](https://github.com/VeliovGroup/meteor-base64-replacement/blob/master/package.js#L3), to the latest available on the [mainstream channel](https://github.com/meteor/meteor/blob/devel/packages/base64/package.js#L3);
-  3. For more info see [`base64-replacement` package](https://github.com/VeliovGroup/meteor-base64-replacement)
+1. Download [`base64-replacement` package](https://github.com/VeliovGroup/meteor-base64-replacement/archive/master.zip) and place into `meteor-app/packages` directory, that's it. Run `meteor update` to make sure new package is applied;
+2. In case of version incompatibility, change [`base64-replacement` version](https://github.com/VeliovGroup/meteor-base64-replacement/blob/master/package.js#L3), to the latest available on the [mainstream channel](https://github.com/meteor/meteor/blob/devel/packages/base64/package.js#L3);
+3. For more info see [`base64-replacement` package](https://github.com/VeliovGroup/meteor-base64-replacement)
 
 ## 100% Tests coverage
 
-To run built-in tests clone this repository and run:
+1. Clone this package
+2. In Terminal (*Console*) go to directory where package is cloned
+3. Then run:
 
 ```shell
+# Default
 meteor test-packages ./
+
+# With custom port
+meteor test-packages ./ --port 8888
 ```
 
 Tests include synchronous, asynchronous and speed tests for Browser and NodeJS, for cases with/out the Native code and/or WebWorker usage.
 
 ## Support this project:
 
-This project wouldn't be possible without [ostr.io](https://ostr.io).
-
-Using [ostr.io](https://ostr.io) you are not only [protecting domain names](https://ostr.io/info/domain-names-protection), [monitoring websites and servers](https://ostr.io/info/monitoring), using [Prerendering for better SEO](https://ostr.io/info/prerendering) of your JavaScript website, but support our Open Source activity, and great packages like this one could be available for free.
+- [Become a patron](https://www.patreon.com/bePatron?u=20396046) — support my open source contributions with monthly donation
+- Use [ostr.io](https://ostr.io) — [Monitoring](https://snmp-monitoring.com), [Analytics](https://ostr.io/info/web-analytics), [WebSec](https://domain-protection.info), [Web-CRON](https://web-cron.info) and [Pre-rendering](https://prerendering.com) for a website
