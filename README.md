@@ -33,7 +33,7 @@ import { Base64 } from 'meteor/ostrio:base64';
 
 ## Native code support
 
-Native code is disabled by default for both NodeJS and browser. Native code represented as `atob, btoa` (*with extension to support Unicode*) in a browser, and `Buffer` at NodeJS.
+Native code is disabled by default for *Browser*. Native code represented as `atob, btoa` (*with extension to support Unicode*) in a browser, and `Buffer` at NodeJS.
 
 Although native code is *10x times* faster, its support is enabled only on *Server*, as natively base64 encoding supports only ASCII symbols in a *Browser*. To enable native code - pass `{ useNative: true }` in constructor:
 
