@@ -1,15 +1,23 @@
 # Isomorphic Base64 implementation
 
+<a href="https://www.patreon.com/bePatron?u=20396046">
+  <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" height="38">
+</a>
+
+<a href="https://ostr.io/info/built-by-developers-for-developers">
+  <img src="https://ostr.io/apple-touch-icon-60x60.png" height="38">
+</a>
+
 Highly efficient isomorphic implementation of Base64 string encoding and decoding. With the support of Unicode, and non-blocking execution via WebWorker. This library has 100% tests coverage, including speed tests.
 
 ## Features
 
-1. [__100%__ tests coverage](https://github.com/VeliovGroup/meteor-base64#100-tests-coverage)
-2. Isomorphic, same API for *Server* and *Browser*
-3. Blazing fast, see [speed tests](https://github.com/VeliovGroup/meteor-base64#100-tests-coverage)
-4. [Non-blocking browser experience](https://github.com/VeliovGroup/meteor-base64#non-blocking-via-webworker), via WebWorkers
-5. [No external dependencies](https://github.com/VeliovGroup/meteor-base64/blob/master/package.js#L9)
-6. Could [replace default Meteor's `base64` package](https://github.com/VeliovGroup/meteor-base64#default-base64-package-replacement)
+1. [__100%__ tests coverage](https://github.com/VeliovGroup/meteor-base64#100-tests-coverage);
+2. Isomorphic, same API for *Server* and *Browser*;
+3. Blazing fast, see [speed tests](https://github.com/VeliovGroup/meteor-base64#100-tests-coverage);
+4. [Non-blocking browser experience](https://github.com/VeliovGroup/meteor-base64#non-blocking-via-webworker), via WebWorkers;
+5. [No external dependencies](https://github.com/VeliovGroup/meteor-base64/blob/master/package.js#L9);
+6. Can [replace default Meteor's `base64` package](https://github.com/VeliovGroup/meteor-base64#default-base64-package-replacement).
 
 ## Installation
 
@@ -30,9 +38,8 @@ Native code is disabled by default for both NodeJS and browser. Native code repr
 Although native code is *10x times* faster, its support is disabled, as natively base64 encoding supports only ASCII symbols in a *Browser* and *Node.js*. To enable native code - use constructor in next form:
 
 ```js
-// Note - first "b" (lowercase)
-import { base64 } from 'meteor/ostrio:base64';
-const nativeB64 = new base64({ useNative: true });
+import { Base64 } from 'meteor/ostrio:base64';
+const nativeB64 = new Base64({ useNative: true });
 ```
 
 ## Non-blocking via WebWorker
@@ -44,16 +51,17 @@ WebWorker is enabled by default, for all `encode/decode` calls with the callback
 ### `.encode()`
 
 ```js
-Base64.encode(plainString [, callback]);
+base64Instance.encode(plainString [, callback]);
 ```
 
 ```js
 import { Base64 } from 'meteor/ostrio:base64';
+const base64 = new Base64();
 
-Base64.encode('My Plain String'); // Returns 'TXkgUGxhaW4gU3RyaW5n'
+base64.encode('My Plain String'); // Returns 'TXkgUGxhaW4gU3RyaW5n'
 
 // Async, non-blocking via WebWorker (if supported) at browser:
-Base64.encode('My Plain String', (error, b64) => {
+base64.encode('My Plain String', (error, b64) => {
   // b64 === 'TXkgUGxhaW4gU3RyaW5n'
 });
 ```
@@ -66,37 +74,38 @@ Base64.decode(base64EncodedString [, callback]);
 
 ```js
 import { Base64 } from 'meteor/ostrio:base64';
+const base64 = new Base64();
 
-Base64.decode('TXkgUGxhaW4gU3RyaW5n'); // Returns 'My Plain String'
+base64.decode('TXkgUGxhaW4gU3RyaW5n'); // Returns 'My Plain String'
 
 // Async, non-blocking via WebWorker (if supported) at browser:
-Base64.decode('TXkgUGxhaW4gU3RyaW5n', (error, str) => {
+base64.decode('TXkgUGxhaW4gU3RyaW5n', (error, str) => {
   // str === 'My Plain String'
 });
 ```
 
-### Constructor `new base64()`
+### Constructor `new Base64()`
 
 ```js
-new base64({ allowWebWorker, useNative, supportNonASCII, ejsonCompatible });
+import { Base64 } from 'meteor/ostrio:base64';
+new Base64({ allowWebWorker, useNative, supportNonASCII, ejsonCompatible });
 ```
 
-- `opts.allowWebWorker` {*Boolean*} - Default: `true`. Use *WebWorker* in a *Browser* if available;
-- `opts.useNative` {*Boolean*} - Default: `false`. Use native `atob`, `btoa` and `Buffer.from`, if available;
+- `opts.allowWebWorker` {*Boolean*} - Default: `false`. Use *WebWorker* in a *Browser* if available;
+- `opts.useNative` {*Boolean*} - Default in *Browser*: `false`; Default on *Server*: `true`. Use native `atob`, `btoa` and `Buffer.from`, when available;
 - `opts.supportNonASCII` {*Boolean*} - Default: `true`. Decreases speed, but gives support for whole utf-8 table;
-- `opts.ejsonCompatible` {*Boolean*} - Default: `false`. Compatible mode with EJSON "binary" format, `.encode()` method will result as *Uint8Array* if `ejsonCompatible` is `true`.
+- `opts.ejsonCompatible` {*Boolean*} - Default: `false`. Compatible mode with EJSON "binary" format, `.encode()` method will result as *Uint8Array* when `ejsonCompatible` is `true`.
 
 ```js
-// Note - first "b" (lowercase)
-import { base64 } from 'meteor/ostrio:base64';
+import { Base64 } from 'meteor/ostrio:base64';
 // Native with WebWorker
-const nativeB64 = new base64({ allowWebWorker: true, useNative: true });
+const nativeB64 = new Base64({ allowWebWorker: true, useNative: true });
 
 // Native without WebWorker
-const mtNativeB64 = new base64({ allowWebWorker: false, useNative: true });
+const mtNativeB64 = new Base64({ allowWebWorker: false, useNative: true });
 
 // Use main thread, no WebWorker
-const mtB64 = new base64({ allowWebWorker: false });
+const mtB64 = new Base64({ allowWebWorker: false });
 ```
 
 ## Default `base64` package replacement

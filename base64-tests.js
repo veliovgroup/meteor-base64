@@ -1,16 +1,30 @@
 import { _ }              from 'meteor/underscore';
 import { EJSON }          from 'meteor/ejson';
 import { Meteor }         from 'meteor/meteor';
-import { Base64, base64 } from 'meteor/ostrio:base64';
+import { Base64 } from 'meteor/ostrio:base64';
 
-const nativeA2B     = new base64({useNative: true, allowWebWorker: false});
-const nativeA2BWW   = new base64({useNative: true, allowWebWorker: true});
-const jsImpl        = new base64({allowWebWorker: false, useNative: false});
-const jsImplBWW     = new base64({allowWebWorker: true, useNative: false});
-const meteorASCII   = new base64({allowWebWorker: false, useNative: false, supportNonASCII: false});
-const meteorASCIIWW = new base64({allowWebWorker: true, useNative: false, supportNonASCII: false});
-const meteorA2B     = new base64({allowWebWorker: false, useNative: false, ejsonCompatible: true, supportNonASCII: false});
-const meteorA2BWW   = new base64({allowWebWorker: true, useNative: false, ejsonCompatible: true, supportNonASCII: false});
+let performance;
+
+if (Meteor.isServer) {
+  performance = require('perf_hooks').performance;
+} else if (window.performance && window.performance.now) {
+  performance = window.performance;
+} else {
+  performance = {
+    now() {
+      return Date.now();
+    }
+  };
+}
+
+const nativeA2B     = new Base64({useNative: true, allowWebWorker: false});
+const nativeA2BWW   = new Base64({useNative: true, allowWebWorker: true});
+const jsImpl        = new Base64({allowWebWorker: false, useNative: false});
+const jsImplBWW     = new Base64({allowWebWorker: true, useNative: false});
+const meteorASCII   = new Base64({allowWebWorker: false, useNative: false, supportNonASCII: false});
+const meteorASCIIWW = new Base64({allowWebWorker: true, useNative: false, supportNonASCII: false});
+const meteorA2B     = new Base64({allowWebWorker: false, useNative: false, ejsonCompatible: true, supportNonASCII: false});
+const meteorA2BWW   = new Base64({allowWebWorker: true, useNative: false, ejsonCompatible: true, supportNonASCII: false});
 const timings       = {};
 const genStr        = (len) => {
   let result = '';
@@ -23,12 +37,12 @@ const genStr        = (len) => {
 };
 
 const strs = {
-  str1024: genStr(1024),
-  str5120: genStr(5120),
-  str10240: genStr(10240),
+  // str1024: genStr(1024),
+  // str5120: genStr(5120),
+  // str10240: genStr(10240),
   str4k: genStr(1024 * 48),
-  str20k: genStr(5120 * 48),
-  str45k: genStr(10240 * 48)
+  // str20k: genStr(5120 * 48),
+  // str45k: genStr(10240 * 48),
 };
 
 const encoders = {
@@ -77,7 +91,7 @@ const testsStrings = {
 const testsStringsKeys = Object.keys(testsStrings);
 
 const getTime = function() {
-  return (this.window && this.window.performance && this.window.performance.now) ? this.window.performance.now() : +(new Date());
+  return performance.now();
 };
 const speedtest = (name, func) => {
   const s   = getTime();
@@ -114,7 +128,7 @@ const speedtestAsync = (name, func, done) => {
 
 let time;
 encodersKeys.forEach((encoderKey) => {
-  if (Meteor.isClient || Meteor.isServer && !~encoderKey.indexOf('With_WebWorkers')) {
+  if (Meteor.isClient || Meteor.isServer && !encoderKey.includes('With_WebWorkers')) {
     Tinytest.add(`Speed Tests - ${encoderKey} - Sync`, function (test) {
       const func = () => encoders[encoderKey].decode(encoders[encoderKey].encode(strs.str4k));
       time = speedtest(`Sync - ${encoderKey}`, func);
@@ -130,7 +144,7 @@ encodersKeys.forEach((encoderKey) => {
             test.isUndefined(err);
             encoders[encoderKey].decode(res, (error, result) => {
               test.isUndefined(error);
-              if (!!~encoderKey.indexOf('Meteor_compatible') && typeof result !== 'string') {
+              if (encoderKey.includes('Meteor_compatible') && typeof result !== 'string') {
                 result = String.fromCharCode.apply(null, result);
               }
               test.isTrue(typeof result === 'string');
@@ -151,7 +165,7 @@ encodersKeys.forEach((encoderKey) => {
   }
 
   testsStringsKeys.forEach((testKey) => {
-    if (!!~encoderKey.indexOf('ASCII only') && !~testKey.indexOf('plain')) {
+    if (encoderKey.includes('ASCII only') && !testKey.includes('plain')) {
       return;
     }
 
@@ -163,7 +177,7 @@ encodersKeys.forEach((encoderKey) => {
     Tinytest.add(`Decode - ${encoderKey} - ${testKey} - Sync`, function (test) {
       const func = () => {
         let res = encoders[encoderKey].decode(testsStrings[testKey].e);
-        if (!!~encoderKey.indexOf('Meteor_compatible')) {
+        if (encoderKey.includes('Meteor_compatible')) {
           res = String.fromCharCode.apply(null, res);
         }
         return res;
@@ -174,7 +188,7 @@ encodersKeys.forEach((encoderKey) => {
     Tinytest.add(`Decode <-> Encode - ${encoderKey} - ${testKey} - Sync`, function (test) {
       const func = () => {
         let res = encoders[encoderKey].decode(encoders[encoderKey].encode(testsStrings[testKey].t));
-        if (!!~encoderKey.indexOf('Meteor_compatible') && typeof res !== 'string') {
+        if (encoderKey.includes('Meteor_compatible') && typeof res !== 'string') {
           res = String.fromCharCode.apply(null, res);
         }
         return res;
@@ -193,7 +207,7 @@ encodersKeys.forEach((encoderKey) => {
     Tinytest.addAsync(`Decode - ${encoderKey} - ${testKey} - Async`, function (test, next) {
       encoders[encoderKey].decode(testsStrings[testKey].e, (err, res) => {
         test.isUndefined(err);
-        if (!!~encoderKey.indexOf('Meteor_compatible') && typeof res !== 'string') {
+        if (encoderKey.includes('Meteor_compatible') && typeof res !== 'string') {
           res = String.fromCharCode.apply(null, res);
         }
         test.equal(res, testsStrings[testKey].t);
@@ -204,13 +218,13 @@ encodersKeys.forEach((encoderKey) => {
     Tinytest.addAsync(`Decode <-> Encode - ${encoderKey} - ${testKey} - Async`, function (test, next) {
       encoders[encoderKey].encode(testsStrings[testKey].t, (err, res) => {
         test.isUndefined(err);
-        if (!~encoderKey.indexOf('Meteor_compatible') && typeof res !== 'string') {
+        if (!encoderKey.includes('Meteor_compatible') && typeof res !== 'string') {
           res = String.fromCharCode.apply(null, res);
         }
         test.equal(res, testsStrings[testKey].e);
         encoders[encoderKey].decode(res, (error, result) => {
           test.isUndefined(error);
-          if (!!~encoderKey.indexOf('Meteor_compatible') && typeof result !== 'string') {
+          if (encoderKey.includes('Meteor_compatible') && typeof result !== 'string') {
             result = String.fromCharCode.apply(null, result);
           }
           test.equal(result, testsStrings[testKey].t);

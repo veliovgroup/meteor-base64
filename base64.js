@@ -4,17 +4,17 @@ import createWebWorkerIfPossible from './worker-create.js';
 const _root = this;
 const fromCharCode = String.fromCharCode;
 
-class base64 {
+class Base64 {
   constructor(opts = {}) {
     this._isNode           = Meteor.isServer; // Save it for NPM release: (_root.navigator || _root.window) ? false : true;
-    this._useNative        = (opts.useNative === undefined) ? false : opts.useNative;
-    this._allowWebWorker   = (opts.allowWebWorker === undefined) ? true : opts.allowWebWorker;
+    this._useNative        = (opts.useNative === undefined) ? Meteor.isServer : opts.useNative;
+    this._allowWebWorker   = (opts.allowWebWorker === undefined) ? false : opts.allowWebWorker;
     this._ejsonCompatible  = (opts.ejsonCompatible === undefined) ? false : opts.ejsonCompatible;
     this._supportNonASCII  = (opts.supportNonASCII === undefined) ? true : opts.supportNonASCII;
     this._supportWebWorker = false;
 
     if (this._allowWebWorker) {
-      createWebWorkerIfPossible(this, base64);
+      createWebWorkerIfPossible(this, Base64);
     }
 
     if (this._useNative && !this._isNode) {
@@ -28,7 +28,7 @@ class base64 {
   }
 
   get newBinary() {
-    return base64.newBinary;
+    return Base64.newBinary;
   }
 
   _registerHandler(id, cb) {
@@ -47,14 +47,14 @@ class base64 {
       if (this._isNode && this._useNative) {
         res = Buffer.from(res, this._supportNonASCII ? 'utf8' : 'ascii').toString('base64');
       } else if (cb && !this._isNode && this._supportWebWorker) {
-        const id = base64._getId();
+        const id = Base64._getId();
         this._registerHandler(id, cb);
         this._worker.postMessage({type: 'encode', n: this._useNative, ascii: this._supportNonASCII, id: id, e: res});
         return void 0;
       } else if (this._useNative && !this._isNode) {
-        res = _root.window.btoa(this._supportNonASCII ? base64._utf8Encode(res) : res);
+        res = _root.window.btoa(this._supportNonASCII ? Base64._utf8Encode(res) : res);
       } else {
-        res = base64._encode(this._supportNonASCII ? base64._utf8Encode(res) : res);
+        res = Base64._encode(this._supportNonASCII ? Base64._utf8Encode(res) : res);
       }
     }
 
@@ -81,19 +81,19 @@ class base64 {
           res = new Buffer(res, 'base64').toString(this._supportNonASCII ? 'utf8' : 'ascii');
         }
       } else if (cb && !this._isNode && this._supportWebWorker) {
-        const id = base64._getId();
+        const id = Base64._getId();
         this._registerHandler(id, cb);
         this._worker.postMessage({type: 'decode', n: this._useNative, ascii: this._supportNonASCII, id: id, e: res});
         return void 0;
       } else if (this._useNative && !this._isNode) {
-        res = this._supportNonASCII ? base64._utf8Decode(_root.window.atob(res)) : _root.window.atob(res);
+        res = this._supportNonASCII ? Base64._utf8Decode(_root.window.atob(res)) : _root.window.atob(res);
       } else {
-        res = this._supportNonASCII ? base64._utf8Decode(base64._decode(res)) : base64._decode(res);
+        res = this._supportNonASCII ? Base64._utf8Decode(Base64._decode(res)) : Base64._decode(res);
       }
     }
 
     if (this._ejsonCompatible) {
-      res = base64.str2uint8(res);
+      res = Base64.str2uint8(res);
     }
 
     if (cb) {
@@ -126,7 +126,7 @@ class base64 {
       } else if (isNaN(i)) {
         a = 64;
       }
-      res += base64._keyArr[n >> 2] + base64._keyArr[(n & 3) << 4 | r >> 4] + base64._keyArr[u] + base64._keyArr[a];
+      res += Base64._keyArr[n >> 2] + Base64._keyArr[(n & 3) << 4 | r >> 4] + Base64._keyArr[u] + Base64._keyArr[a];
     }
     return res;
   }
@@ -168,10 +168,10 @@ class base64 {
     let a;
     let f = 0;
     while (f < e.length) {
-      s = base64._keyTab[e.charAt(f++)];
-      o = base64._keyTab[e.charAt(f++)];
-      u = base64._keyTab[e.charAt(f++)];
-      a = base64._keyTab[e.charAt(f++)];
+      s = Base64._keyTab[e.charAt(f++)];
+      o = Base64._keyTab[e.charAt(f++)];
+      u = Base64._keyTab[e.charAt(f++)];
+      a = Base64._keyTab[e.charAt(f++)];
       res += fromCharCode(s << 2 | o >> 4);
       if (u !== 64) {
         res += fromCharCode((o & 15) << 4 | u >> 2);
@@ -222,20 +222,20 @@ class base64 {
 
   static newUint8Array(len) {
     if (typeof Uint8Array === 'undefined') {
-      return base64.uint8Polyfill(len);
+      return Base64.uint8Polyfill(len);
     }
     return new Uint8Array(len);
   }
 
   static newBinary(len) {
     if (typeof Uint8Array === 'undefined' || typeof ArrayBuffer === 'undefined') {
-      return base64.uint8Polyfill(len);
+      return Base64.uint8Polyfill(len);
     }
     return new Uint8Array(new ArrayBuffer(len));
   }
 
   static str2uint8(str) {
-    const uint = base64.newUint8Array(str.length);
+    const uint = Base64.newUint8Array(str.length);
 
     for(let i = 0; i < str.length; ++i){
       uint[i] = str.charCodeAt(i);
@@ -247,5 +247,4 @@ class base64 {
   static _keyTab = { 0: 52, 1: 53, 2: 54, 3: 55, 4: 56, 5: 57, 6: 58, 7: 59, 8: 60, 9: 61, A: 0, B: 1, C: 2, D: 3, E: 4, F: 5, G: 6, H: 7, I: 8, J: 9, K: 10, L: 11, M: 12, N: 13, O: 14, P: 15, Q: 16, R: 17, S: 18, T: 19, U: 20, V: 21, W: 22, X: 23, Y: 24, Z: 25, a: 26, b: 27, c: 28, d: 29, e: 30, f: 31, g: 32, h: 33, i: 34, j: 35, k: 36, l: 37, m: 38, n: 39, o: 40, p: 41, q: 42, r: 43, s: 44, t: 45, u: 46, v: 47, w: 48, x: 49, y: 50, z: 51, '+': 62, '/': 63, '=': 64};
 }
 
-const Base64 = new base64();
-export { Base64, base64 };
+export { Base64 };
