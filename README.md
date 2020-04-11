@@ -69,7 +69,7 @@ base64.encode('My Plain String', (error, b64) => {
 ### `.decode()`
 
 ```js
-Base64.decode(base64EncodedString [, callback]);
+base64Instance.decode(base64EncodedString [, callback]);
 ```
 
 ```js
