@@ -35,7 +35,7 @@ import { Base64 } from 'meteor/ostrio:base64';
 
 Native code is disabled by default for both NodeJS and browser. Native code represented as `atob, btoa` (*with extension to support Unicode*) in a browser, and `Buffer` at NodeJS.
 
-Although native code is *10x times* faster, its support is disabled, as natively base64 encoding supports only ASCII symbols in a *Browser* and *Node.js*. To enable native code - use constructor in next form:
+Although native code is *10x times* faster, its support is enabled only on *Server*, as natively base64 encoding supports only ASCII symbols in a *Browser*. To enable native code - pass `{ useNative: true }` in constructor:
 
 ```js
 import { Base64 } from 'meteor/ostrio:base64';
@@ -44,7 +44,7 @@ const nativeB64 = new Base64({ useNative: true });
 
 ## Non-blocking via WebWorker
 
-WebWorker is enabled by default, for all `encode/decode` calls with the callback. WebWorker is used only if supported by a browser, otherwise, it will fall-back to the main thread. In the real-world application WebWorker, usage will gain you extra FPS, and UI will act more smoothly.
+WebWorker is __disabled by default__, enable it with passing `{ allowWebWorker: true }` in `new Base64()` constructor. Once enabled it will be used for all `encode/decode` calls with the *callback*. WebWorker is used only if supported by a browser, otherwise, it will fall-back to the main thread. In the real-world application WebWorker, usage will gain you extra FPS, and UI will act more smoothly.
 
 ## API
 
